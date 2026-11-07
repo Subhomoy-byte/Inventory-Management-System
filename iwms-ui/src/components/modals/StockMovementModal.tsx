@@ -62,28 +62,42 @@ export const StockMovementModal: React.FC<StockMovementModalProps> = ({
           timestamp: new Date().toISOString(),
         });
       } else {
-        // Send directly via API
-        if (movementType === 'IN') {
-          await api.stockIn({
+        // Send directly via API with fallback to IndexedDB Outbox
+        try {
+          if (movementType === 'IN') {
+            await api.stockIn({
+              productId: selectedProductId,
+              quantity,
+              unitPrice,
+              targetBin,
+              reason,
+            });
+          } else if (movementType === 'OUT') {
+            await api.stockOut({
+              productId: selectedProductId,
+              quantity,
+              sourceBin,
+              reason,
+            });
+          } else if (movementType === 'TRANSFER') {
+            await api.stockTransfer({
+              productId: selectedProductId,
+              sourceBin,
+              targetBin,
+              quantity,
+            });
+          }
+        } catch (apiErr) {
+          console.warn('Backend unavailable, queueing movement to local Outbox:', apiErr);
+          await OfflineSyncManager.queueMovement({
             productId: selectedProductId,
+            movementType,
             quantity,
-            unitPrice,
-            targetBin,
+            sourceBin: movementType === 'IN' ? undefined : sourceBin,
+            targetBin: movementType === 'OUT' ? undefined : targetBin,
             reason,
-          });
-        } else if (movementType === 'OUT') {
-          await api.stockOut({
-            productId: selectedProductId,
-            quantity,
-            sourceBin,
-            reason,
-          });
-        } else if (movementType === 'TRANSFER') {
-          await api.stockTransfer({
-            productId: selectedProductId,
-            sourceBin,
-            targetBin,
-            quantity,
+            operatorId,
+            timestamp: new Date().toISOString(),
           });
         }
       }

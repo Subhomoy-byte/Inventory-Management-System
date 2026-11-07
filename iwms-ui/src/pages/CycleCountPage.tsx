@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import type { Product } from '../types';
 import { api } from '../services/api';
+import { OfflineSyncManager } from '../storage/sync';
 import { GlassCard } from '../components/common/GlassCard';
 import {
   ClipboardCheck,
@@ -48,6 +49,15 @@ export const CycleCountPage: React.FC<CycleCountPageProps> = ({
           productId: p.id,
           quantity: diff,
           reason: `Cycle count surplus adjustment (+${diff})`,
+        }).catch(async () => {
+          await OfflineSyncManager.queueMovement({
+            productId: p.id,
+            movementType: 'IN',
+            quantity: diff,
+            reason: `Cycle count surplus adjustment (+${diff})`,
+            operatorId: 'auditor',
+            timestamp: new Date().toISOString(),
+          });
         });
       } else {
         // Stock Out deficit
@@ -55,6 +65,15 @@ export const CycleCountPage: React.FC<CycleCountPageProps> = ({
           productId: p.id,
           quantity: Math.abs(diff),
           reason: `Cycle count deficit adjustment (${diff})`,
+        }).catch(async () => {
+          await OfflineSyncManager.queueMovement({
+            productId: p.id,
+            movementType: 'OUT',
+            quantity: Math.abs(diff),
+            reason: `Cycle count deficit adjustment (${diff})`,
+            operatorId: 'auditor',
+            timestamp: new Date().toISOString(),
+          });
         });
       }
 

@@ -18,6 +18,10 @@ async function handleResponse<T>(res: Response): Promise<T> {
     const errText = await res.text().catch(() => '');
     throw new Error(errText || `API error: ${res.status} ${res.statusText}`);
   }
+  const contentType = res.headers.get('content-type') || '';
+  if (contentType.includes('text/html')) {
+    throw new Error('Received HTML response instead of JSON (backend API offline or unrouted)');
+  }
   return res.json();
 }
 

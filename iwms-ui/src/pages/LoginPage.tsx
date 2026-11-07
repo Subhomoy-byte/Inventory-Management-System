@@ -3,6 +3,8 @@ import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { Boxes, Lock, User, ArrowRight, ShieldCheck, Sun, Moon, AlertCircle } from 'lucide-react';
 
+const API_BASE = (import.meta as any).env?.VITE_API_BASE || '/api';
+
 export const LoginPage: React.FC = () => {
   const { login } = useAuth();
   const { theme, toggleTheme } = useTheme();
@@ -12,44 +14,79 @@ export const LoginPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const authenticateDemoUser = () => {
+    const trimmedUser = username.trim().toLowerCase();
+    const trimmedPass = password.trim();
+
+    // Verify credentials for standard demo accounts
+    if (trimmedUser === 'admin' && trimmedPass !== 'admin123') {
+      setError('Invalid demo password. For admin, use: admin123');
+      return;
+    }
+    if (trimmedUser === 'manager' && trimmedPass !== 'manager123') {
+      setError('Invalid demo password. For manager, use: manager123');
+      return;
+    }
+    if (trimmedUser === 'employee' && trimmedPass !== 'emp123') {
+      setError('Invalid demo password. For employee, use: emp123');
+      return;
+    }
+
+    let role: 'ADMIN' | 'MANAGER' | 'EMPLOYEE' = 'EMPLOYEE';
+    if (trimmedUser.includes('admin')) role = 'ADMIN';
+    else if (trimmedUser.includes('manager')) role = 'MANAGER';
+
+    login('demo-offline-token-' + Date.now(), {
+      id: 'user-' + (trimmedUser || 'demo'),
+      username: username.trim() || 'Demo User',
+      role,
+      active: true,
+    });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
     setLoading(true);
 
     try {
-      const response = await fetch('/api/auth/login', {
+      const response = await fetch(`${API_BASE}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),
       });
 
-      if (!response.ok) {
-        if (response.status === 401) {
-          throw new Error('Invalid username or password');
-        } else if (response.status === 423) {
-          throw new Error('Account locked due to consecutive failed attempts (5 min cooldown)');
-        } else {
-          throw new Error(`Authentication failed (${response.status})`);
+      if (response.ok) {
+        const contentType = response.headers.get('content-type') || '';
+        if (!contentType.includes('text/html')) {
+          const data = await response.json();
+          login(data.token, data.user);
+          return;
         }
       }
 
-      const data = await response.json();
-      login(data.token, data.user);
+      if (response.status === 401) {
+        throw new Error('Invalid username or password');
+      } else if (response.status === 423) {
+        throw new Error('Account locked due to consecutive failed attempts (5 min cooldown)');
+      } else if (response.status === 404 || response.status === 405 || response.status >= 500) {
+        // Static hosting environment (Vercel / Netlify) with no backend API running
+        authenticateDemoUser();
+        return;
+      } else {
+        throw new Error(`Authentication failed (${response.status})`);
+      }
     } catch (err: any) {
-      console.warn('Login request failed:', err);
-      // Fallback for offline demo testing if backend is offline
-      if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError')) {
-        let role: 'ADMIN' | 'MANAGER' | 'EMPLOYEE' = 'EMPLOYEE';
-        if (username.toLowerCase().includes('admin')) role = 'ADMIN';
-        else if (username.toLowerCase().includes('manager')) role = 'MANAGER';
-
-        login('demo-offline-token-' + Date.now(), {
-          id: 'user-' + username,
-          username,
-          role,
-          active: true,
-        });
+      console.warn('Login request failed or backend unavailable:', err);
+      if (
+        err.message.includes('Failed to fetch') ||
+        err.message.includes('NetworkError') ||
+        err.message.includes('Load failed') ||
+        err.message.includes('Failed to load') ||
+        err.message.includes('Unexpected token') ||
+        err.message.includes('is not valid JSON')
+      ) {
+        authenticateDemoUser();
       } else {
         setError(err.message || 'Authentication error');
       }
