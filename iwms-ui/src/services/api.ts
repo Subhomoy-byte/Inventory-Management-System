@@ -1,6 +1,6 @@
 import type { Product, Warehouse, StockMovement, SyncQueueItem, SyncConflict } from '../types';
 
-const API_BASE = '/api';
+const API_BASE = (import.meta as any).env?.VITE_API_BASE || '/api';
 
 function getAuthHeader(): Record<string, string> {
   const token = localStorage.getItem('iwms_token');

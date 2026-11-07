@@ -35,6 +35,7 @@ Packaged as a single self-contained executable JAR (`java -jar iwms.jar`), IWMS 
 7. [Comprehensive REST API Reference](#7-comprehensive-rest-api-reference)
 8. [Automated Verification & Test Suite](#8-automated-verification--test-suite)
 9. [Troubleshooting & FAQ](#9-troubleshooting--faq)
+10. [Cloud & Vercel Deployment ($0 Free Hosting)](#10-cloud--vercel-deployment-0-free-hosting)
 
 ---
 
@@ -451,6 +452,51 @@ Then access at `http://localhost:9090`.
 
 #### Q: Can I run this on a Raspberry Pi or low-power mini PC?
 **A:** Yes! Because IWMS requires no external database engine and runs lightweight in-memory collections, it runs smoothly on single-board computers (Raspberry Pi 4/5) with 2GB+ RAM.
+
+---
+
+## 10. Cloud & Vercel Deployment ($0 Free Hosting)
+
+IWMS can be deployed to the cloud for free ($0) in two ways:
+
+### Option A: Deploy Frontend to Vercel (Interactive Demo / Web PWA)
+Vercel is a global frontend and edge cloud platform. While Vercel does not run long-running Java virtual machines, **the React 19 PWA (`iwms-ui`) can be deployed to Vercel in 1 click**:
+
+1. **Push to GitHub:** Ensure your latest code is on GitHub.
+2. **Import into Vercel:**
+   - Go to [vercel.com](https://vercel.com) and log in.
+   - Click **"Add New..."** &rarr; **"Project"**.
+   - Select your repository: `Subhomoy-byte/Inventory-Management-System`.
+3. **Automatic Configuration:**
+   - The included [`vercel.json`](vercel.json) will automatically configure Vite, build `iwms-ui`, and set output directory to `iwms-ui/dist`.
+4. **Deploy:** Click **"Deploy"**.
+   - Your live frontend URL (`https://inventory-management-system-xxx.vercel.app`) will be active in seconds!
+   - **Standalone Demo Mode:** When running on Vercel without a backend connected, the PWA automatically uses its built-in browser IndexedDB database to populate demo inventory, allowing anyone on the internet to test the glassmorphism UI, 2D warehouse map, and cycle counts interactively!
+   - *(Optional)* To connect your Vercel frontend to a live Java backend, set the environment variable:
+     ```
+     VITE_API_BASE=https://your-iwms-backend.onrender.com/api
+     ```
+
+---
+
+### Option B: Deploy Full-Stack (Java Backend + React Frontend) to Render ($0 Free)
+To run the complete system (including the Spring Boot REST API, WAL persistence, and OpenPDF report generation) live on the web:
+
+1. **Sign Up:** Go to [render.com](https://render.com) (free tier, $0/month).
+2. **Create New Web Service:**
+   - Click **"New +"** &rarr; **"Web Service"**.
+   - Connect your GitHub repository: `Subhomoy-byte/Inventory-Management-System`.
+3. **Configure Settings:**
+   - **Environment:** Select **Docker** (Render will automatically detect the root [`Dockerfile`](Dockerfile)).
+   - **Instance Type:** Select **Free ($0/month)**.
+   - **Advanced &rarr; Add Environment Variable:**
+     - Key: `PORT`
+     - Value: `8443`
+4. **Deploy:** Click **"Create Web Service"**.
+   - Render will build the multi-stage Docker container (compiling the React frontend and Java backend together) and launch the live application at:
+     ```
+     https://your-service.onrender.com
+     ```
 
 ---
 

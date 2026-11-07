@@ -24,7 +24,20 @@ export class OfflineSyncManager {
 
   public static async getCachedProducts(): Promise<Product[]> {
     const db = await getDb();
-    return db.getAll('cached_products');
+    const products = await db.getAll('cached_products');
+    if (products.length > 0) return products;
+
+    // Default demonstration seed for standalone Vercel preview
+    const demoSeed: Product[] = [
+      { id: 'prod-001', sku: 'PROD-PERISH-001', name: 'Organic Fresh Milk 1L', description: 'Grade A Pasteurized Milk', category: 'PERISHABLE', quantity: 45, reorderPoint: 20, costPrice: 1.80, sellingPrice: 3.50, binLocation: 'BIN-B1-01', productType: 'PERISHABLE', status: 'OPTIMAL' },
+      { id: 'prod-002', sku: 'PROD-PERISH-002', name: 'Fresh Strawberries 500g', description: 'Hydroponic strawberries', category: 'PERISHABLE', quantity: 12, reorderPoint: 15, costPrice: 2.50, sellingPrice: 5.00, binLocation: 'BIN-B1-02', productType: 'PERISHABLE', status: 'LOW_STOCK' },
+      { id: 'prod-003', sku: 'PROD-ELEC-001', name: 'Wireless Ergonomic Mouse', description: 'Bluetooth 5.0 rechargeable', category: 'ELECTRONICS', quantity: 85, reorderPoint: 25, costPrice: 18.00, sellingPrice: 39.99, binLocation: 'BIN-C1-01', productType: 'ELECTRONIC', status: 'OPTIMAL' },
+      { id: 'prod-004', sku: 'PROD-ELEC-002', name: 'Mechanical Keyboard RGB', description: 'Hot-swappable tactile switches', category: 'ELECTRONICS', quantity: 8, reorderPoint: 20, costPrice: 42.00, sellingPrice: 89.99, binLocation: 'BIN-C1-02', productType: 'ELECTRONIC', status: 'CRITICAL' },
+      { id: 'prod-005', sku: 'PROD-FRAG-001', name: 'Ceramic Dinnerware Set 16pc', description: 'Porcelain dinner set', category: 'FRAGILE', quantity: 34, reorderPoint: 10, costPrice: 28.00, sellingPrice: 65.00, binLocation: 'BIN-A1-01', productType: 'FRAGILE', status: 'OPTIMAL' },
+      { id: 'prod-006', sku: 'PROD-BULK-001', name: 'Industrial Steel Fasteners 10kg', description: 'Galvanized zinc hex bolts', category: 'BULK', quantity: 150, reorderPoint: 50, costPrice: 12.00, sellingPrice: 28.50, binLocation: 'BIN-A1-02', productType: 'BULK', status: 'OPTIMAL' },
+    ];
+    await this.cacheProducts(demoSeed);
+    return demoSeed;
   }
 
   // Cache warehouses for offline topology
@@ -39,7 +52,45 @@ export class OfflineSyncManager {
 
   public static async getCachedWarehouses(): Promise<Warehouse[]> {
     const db = await getDb();
-    return db.getAll('cached_warehouses');
+    const warehouses = await db.getAll('cached_warehouses');
+    if (warehouses.length > 0) return warehouses;
+
+    const demoWarehouse: Warehouse = {
+      id: 'WH-MAIN',
+      name: 'Central Logistics Fulfillment Hub',
+      location: '100 Industrial Parkway',
+      zones: [
+        {
+          id: 'ZONE-A',
+          name: 'Ambient Storage Zone',
+          categoryPreference: 'GENERAL / BULK',
+          bins: [
+            { id: 'BIN-A1-01', code: 'BIN-A1-01', capacityQuantity: 200, maxWeightKg: 500, currentQuantity: 34, currentWeightKg: 80, productIds: ['prod-005'] },
+            { id: 'BIN-A1-02', code: 'BIN-A1-02', capacityQuantity: 200, maxWeightKg: 1000, currentQuantity: 150, currentWeightKg: 750, productIds: ['prod-006'] },
+          ],
+        },
+        {
+          id: 'ZONE-B',
+          name: 'Cold Storage Refrigeration Zone',
+          categoryPreference: 'PERISHABLE',
+          bins: [
+            { id: 'BIN-B1-01', code: 'BIN-B1-01', capacityQuantity: 100, maxWeightKg: 250, currentQuantity: 45, currentWeightKg: 45, productIds: ['prod-001'] },
+            { id: 'BIN-B1-02', code: 'BIN-B1-02', capacityQuantity: 100, maxWeightKg: 250, currentQuantity: 12, currentWeightKg: 10, productIds: ['prod-002'] },
+          ],
+        },
+        {
+          id: 'ZONE-C',
+          name: 'High-Security Electronics Vault',
+          categoryPreference: 'ELECTRONICS',
+          bins: [
+            { id: 'BIN-C1-01', code: 'BIN-C1-01', capacityQuantity: 150, maxWeightKg: 300, currentQuantity: 85, currentWeightKg: 40, productIds: ['prod-003'] },
+            { id: 'BIN-C1-02', code: 'BIN-C1-02', capacityQuantity: 150, maxWeightKg: 300, currentQuantity: 8, currentWeightKg: 12, productIds: ['prod-004'] },
+          ],
+        },
+      ],
+    };
+    await this.cacheWarehouses([demoWarehouse]);
+    return [demoWarehouse];
   }
 
   // Enqueue an offline movement

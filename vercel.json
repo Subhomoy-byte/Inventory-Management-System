@@ -1,0 +1,11 @@
+{
+  "buildCommand": "cd iwms-ui && npm install --legacy-peer-deps && npm run build",
+  "outputDirectory": "iwms-ui/dist",
+  "framework": "vite",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
