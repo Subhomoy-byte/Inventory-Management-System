@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 450" width="100%" height="100%">
+  <defs>
+    <linearGradient id="syncBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#090d16" />
+      <stop offset="100%" stop-color="#020617" />
+    </linearGradient>
+    <linearGradient id="glowAmber" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b" />
+      <stop offset="100%" stop-color="#d97706" />
+    </linearGradient>
+    <linearGradient id="glowEmerald2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10b981" />
+      <stop offset="100%" stop-color="#059669" />
+    </linearGradient>
+  </defs>
+
+  <style>
+    .title { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 20px; font-weight: 800; fill: #ffffff; }
+    .subtitle { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 12px; fill: #94a3b8; }
+    .box-title { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 13.5px; font-weight: 700; fill: #f8fafc; }
+    .box-desc { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 11px; fill: #94a3b8; }
+    .mono { font-family: 'Consolas', monospace; font-size: 10px; font-weight: 700; }
+  </style>
+
+  <rect width="1100" height="450" rx="16" fill="url(#syncBg)" />
+
+  <g transform="translate(50, 40)">
+    <text x="0" y="0" class="title">PWA Offline Outbox &amp; Idempotent LAN Sync Flow</text>
+    <text x="0" y="20" class="subtitle">Fault-tolerant warehouse operations with zero data loss when mobile tablets leave Wi-Fi coverage</text>
+  </g>
+
+  <!-- Left: Mobile Device State (Online vs Offline) -->
+  <g transform="translate(50, 95)">
+    <!-- Phase A: Offline Operation -->
+    <g transform="translate(0, 0)">
+      <rect width="310" height="150" rx="14" fill="#1e293b" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.5" />
+      <circle cx="30" cy="30" r="14" fill="#f59e0b" fill-opacity="0.2" />
+      <text x="56" y="28" class="box-title" fill="#fde68a">1. Wi-Fi Dead Zone / Disconnect</text>
+      <text x="56" y="44" class="box-desc">Floor worker records stock changes offline</text>
+      
+      <rect x="20" y="65" width="270" height="65" rx="8" fill="#0f172a" />
+      <text x="32" y="85" class="mono" fill="#fbbf24">&bull; Generates unique client syncId</text>
+      <text x="32" y="102" class="mono" fill="#cbd5e1">&bull; Appends to IndexedDB 'outbox'</text>
+      <text x="32" y="119" class="mono" fill="#34d399">&bull; Optimistic local on-hand update</text>
+    </g>
+
+    <!-- Phase B: Auto Reconnect Detection -->
+    <g transform="translate(0, 175)">
+      <rect width="310" height="145" rx="14" fill="#1e293b" stroke="#10b981" stroke-width="1.5" stroke-opacity="0.5" />
+      <circle cx="30" cy="30" r="14" fill="#10b981" fill-opacity="0.2" />
+      <text x="56" y="28" class="box-title" fill="#a7f3d0">2. LAN Reconnect Detected</text>
+      <text x="56" y="44" class="box-desc">Device walks back into Wi-Fi range</text>
+      
+      <rect x="20" y="65" width="270" height="60" rx="8" fill="#0f172a" />
+      <text x="32" y="85" class="mono" fill="#6ee7b7">&bull; window.addEventListener('online')</text>
+      <text x="32" y="103" class="mono" fill="#38bdf8">&bull; OfflineSyncManager.drainQueue()</text>
+      <text x="32" y="119" class="mono" fill="#cbd5e1">&bull; Docks &amp; Navbar status turns green</text>
+    </g>
+  </g>
+
+  <!-- Middle: Batch HTTP Transmission -->
+  <g transform="translate(410, 165)">
+    <rect width="280" height="140" rx="14" fill="#1e293b" stroke="#6366f1" stroke-width="1.5" stroke-opacity="0.5" />
+    <text x="25" y="32" class="box-title" fill="#c7d2fe">3. Atomic Batch Flush</text>
+    <text x="25" y="50" class="box-desc">Encrypted HTTPS JSON Payload</text>
+
+    <rect x="20" y="70" width="240" height="50" rx="8" fill="#0f172a" />
+    <text x="32" y="90" class="mono" fill="#818cf8">POST /api/sync/batch</text>
+    <text x="32" y="108" class="mono" fill="#94a3b8">Payload: [ { syncId, sku, qty, ... } ]</text>
+  </g>
+
+  <!-- Arrows -->
+  <path d="M 360 170 L 410 210" stroke="#818cf8" stroke-width="2" fill="none" />
+  <path d="M 360 250 L 410 230" stroke="#818cf8" stroke-width="2" fill="none" />
+  <path d="M 690 235 L 740 235" stroke="#818cf8" stroke-width="2" fill="none" />
+
+  <!-- Right: Server Engine & Deficit Conflict Handling -->
+  <g transform="translate(740, 95)">
+    <rect width="310" height="320" rx="14" fill="#1e293b" stroke="#8b5cf6" stroke-width="1.5" stroke-opacity="0.5" />
+    <circle cx="30" cy="30" r="14" fill="#8b5cf6" fill-opacity="0.2" />
+    <text x="56" y="28" class="box-title" fill="#e9d5ff">4. SyncEngine &amp; Reconciliation</text>
+    <text x="56" y="44" class="box-desc">Server-side idempotent ledger commit</text>
+
+    <!-- Branch A: Success -->
+    <g transform="translate(20, 65)">
+      <rect width="270" height="110" rx="10" fill="#064e3b" fill-opacity="0.3" stroke="#10b981" stroke-width="1" />
+      <text x="15" y="24" class="box-title" font-size="12px" fill="#6ee7b7">&check; Idempotent Success Case</text>
+      <text x="15" y="44" class="mono" fill="#cbd5e1">&bull; Deduplicates syncId</text>
+      <text x="15" y="62" class="mono" fill="#cbd5e1">&bull; Appends to WAL ledger.log</text>
+      <text x="15" y="80" class="mono" fill="#cbd5e1">&bull; Atomic flush to products.json</text>
+      <text x="15" y="98" class="mono" fill="#34d399">&bull; Clears item from IndexedDB</text>
+    </g>
+
+    <!-- Branch B: Conflict -->
+    <g transform="translate(20, 190)">
+      <rect width="270" height="110" rx="10" fill="#4c0519" fill-opacity="0.3" stroke="#f43f5e" stroke-width="1" />
+      <text x="15" y="24" class="box-title" font-size="12px" fill="#fda4af">&times; Deficit Conflict Case</text>
+      <text x="15" y="44" class="mono" fill="#cbd5e1">&bull; Offline picks exceeded stock</text>
+      <text x="15" y="62" class="mono" fill="#cbd5e1">&bull; Logs to SyncConflict registry</text>
+      <text x="15" y="80" class="mono" fill="#fda4af">&bull; Surfaces in Manager Review</text>
+      <text x="15" y="98" class="mono" fill="#f43f5e">&bull; Prevents ledger corruption</text>
+    </g>
+  </g>
+</svg>

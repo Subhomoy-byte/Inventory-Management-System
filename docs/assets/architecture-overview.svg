@@ -1,0 +1,252 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 780" width="100%" height="100%">
+  <defs>
+    <!-- Background Gradients -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#090d16" />
+      <stop offset="50%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#030712" />
+    </linearGradient>
+
+    <!-- Ambient Glows -->
+    <radialGradient id="glowIndigo" cx="20%" cy="20%" r="50%">
+      <stop offset="0%" stop-color="#6366f1" stop-opacity="0.25" />
+      <stop offset="100%" stop-color="#6366f1" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="glowPurple" cx="80%" cy="25%" r="50%">
+      <stop offset="0%" stop-color="#a855f7" stop-opacity="0.22" />
+      <stop offset="100%" stop-color="#a855f7" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="glowEmerald" cx="50%" cy="80%" r="60%">
+      <stop offset="0%" stop-color="#10b981" stop-opacity="0.18" />
+      <stop offset="100%" stop-color="#10b981" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Card Gradients -->
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b" stop-opacity="0.75" />
+      <stop offset="100%" stop-color="#0f172a" stop-opacity="0.85" />
+    </linearGradient>
+    <linearGradient id="primaryGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#6366f1" />
+      <stop offset="100%" stop-color="#a855f7" />
+    </linearGradient>
+    <linearGradient id="accentEmerald" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#059669" />
+      <stop offset="100%" stop-color="#10b981" />
+    </linearGradient>
+    <linearGradient id="accentAmber" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#d97706" />
+      <stop offset="100%" stop-color="#f59e0b" />
+    </linearGradient>
+
+    <!-- Filters -->
+    <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#000" flood-opacity="0.45" />
+    </filter>
+  </defs>
+
+  <style>
+    .title { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; font-weight: 800; fill: #ffffff; }
+    .subtitle { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; font-size: 13px; fill: #94a3b8; }
+    .card-title { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; font-weight: 700; font-size: 14px; fill: #f8fafc; }
+    .card-subtitle { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; font-size: 11px; fill: #94a3b8; }
+    .item-text { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; font-size: 11px; fill: #cbd5e1; font-weight: 500; }
+    .mono-badge { font-family: 'Consolas', monospace; font-size: 10px; font-weight: 700; }
+    .layer-tag { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; }
+  </style>
+
+  <!-- Background Base -->
+  <rect width="1200" height="780" fill="url(#bgGrad)" />
+  <rect width="1200" height="780" fill="url(#glowIndigo)" />
+  <rect width="1200" height="780" fill="url(#glowPurple)" />
+  <rect width="1200" height="780" fill="url(#glowEmerald)" />
+
+  <!-- Top Title Banner -->
+  <g transform="translate(60, 45)">
+    <rect x="0" y="0" width="46" height="46" rx="12" fill="url(#primaryGrad)" />
+    <path d="M 14 16 L 32 16 L 32 20 L 14 20 Z M 14 23 L 32 23 L 32 27 L 14 27 Z M 14 30 L 26 30 L 26 34 L 14 34 Z" fill="#ffffff" />
+    <text x="60" y="24" class="title" font-size="24">IWMS System Architecture</text>
+    <text x="60" y="42" class="subtitle">Multi-Tier Offline-First Inventory &amp; Warehouse Management System &bull; Pure Java Domain + Spring Boot 3 + React PWA</text>
+    
+    <g transform="translate(930, 8)">
+      <rect x="0" y="0" width="150" height="30" rx="15" fill="#1e293b" stroke="#334155" stroke-width="1" />
+      <circle cx="16" cy="15" r="5" fill="#10b981" />
+      <text x="30" y="19" class="mono-badge" fill="#34d399">100% $0 FREE &amp; OPEN</text>
+    </g>
+  </g>
+
+  <!-- LAYER 1: CLIENT ACCESS & LAN DEVICES -->
+  <g transform="translate(60, 115)">
+    <text x="0" y="0" class="layer-tag" fill="#818cf8">Tier 1: Client &amp; Device Access (Local Area Network)</text>
+    
+    <g transform="translate(0, 15)">
+      <!-- Box 1: Mobile Devices -->
+      <g transform="translate(0, 0)" filter="url(#cardShadow)">
+        <rect width="340" height="110" rx="16" fill="url(#cardGrad)" stroke="#38bdf8" stroke-width="1.5" stroke-opacity="0.3" />
+        <circle cx="36" cy="36" r="18" fill="#0284c7" fill-opacity="0.2" />
+        <path d="M 32 26 L 40 26 C 42 26 43 27 43 29 L 43 43 C 43 45 42 46 40 46 L 32 46 C 30 46 29 45 29 43 L 29 29 C 29 27 30 26 32 26 Z" fill="none" stroke="#38bdf8" stroke-width="2" />
+        <text x="66" y="32" class="card-title">Handheld Scanners &amp; Mobile Tablets</text>
+        <text x="66" y="48" class="card-subtitle">Floor picking, barcode scanning &amp; cycle counts</text>
+        <rect x="20" y="70" width="95" height="22" rx="6" fill="#0369a1" fill-opacity="0.25" />
+        <text x="28" y="85" class="mono-badge" fill="#7dd3fc">PWA Standalone</text>
+        <rect x="125" y="70" width="95" height="22" rx="6" fill="#059669" fill-opacity="0.25" />
+        <text x="135" y="85" class="mono-badge" fill="#6ee7b7">Offline Outbox</text>
+        <rect x="230" y="70" width="95" height="22" rx="6" fill="#7c3aed" fill-opacity="0.25" />
+        <text x="240" y="85" class="mono-badge" fill="#c4b5fd">Zero App Install</text>
+      </g>
+
+      <!-- Box 2: Workstations -->
+      <g transform="translate(370, 0)" filter="url(#cardShadow)">
+        <rect width="340" height="110" rx="16" fill="url(#cardGrad)" stroke="#818cf8" stroke-width="1.5" stroke-opacity="0.3" />
+        <circle cx="36" cy="36" r="18" fill="#4f46e5" fill-opacity="0.2" />
+        <rect x="28" y="27" width="16" height="12" rx="2" fill="none" stroke="#818cf8" stroke-width="2" />
+        <line x1="36" y1="39" x2="36" y2="45" stroke="#818cf8" stroke-width="2" />
+        <text x="66" y="32" class="card-title">Desktop &amp; Warehouse Workstations</text>
+        <text x="66" y="48" class="card-subtitle">Executive analytics, purchase orders &amp; maps</text>
+        <rect x="20" y="70" width="95" height="22" rx="6" fill="#4338ca" fill-opacity="0.25" />
+        <text x="30" y="85" class="mono-badge" fill="#a5b4fc">Glassmorphism</text>
+        <rect x="125" y="70" width="95" height="22" rx="6" fill="#059669" fill-opacity="0.25" />
+        <text x="133" y="85" class="mono-badge" fill="#6ee7b7">Recharts Viz</text>
+        <rect x="230" y="70" width="95" height="22" rx="6" fill="#d97706" fill-opacity="0.25" />
+        <text x="238" y="85" class="mono-badge" fill="#fde68a">Time-Travel</text>
+      </g>
+
+      <!-- Box 3: Thermal / Floor Printers -->
+      <g transform="translate(740, 0)" filter="url(#cardShadow)">
+        <rect width="340" height="110" rx="16" fill="url(#cardGrad)" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.3" />
+        <circle cx="36" cy="36" r="18" fill="#059669" fill-opacity="0.2" />
+        <rect x="28" y="28" width="16" height="12" rx="2" fill="none" stroke="#34d399" stroke-width="2" />
+        <line x1="32" y1="34" x2="40" y2="34" stroke="#34d399" stroke-width="2" />
+        <text x="66" y="32" class="card-title">Thermal &amp; Floor Report Printers</text>
+        <text x="66" y="48" class="card-subtitle">A4 monochrome physical floor audit sheets</text>
+        <rect x="20" y="70" width="95" height="22" rx="6" fill="#059669" fill-opacity="0.25" />
+        <text x="30" y="85" class="mono-badge" fill="#6ee7b7">OpenPDF A4</text>
+        <rect x="125" y="70" width="95" height="22" rx="6" fill="#dc2626" fill-opacity="0.25" />
+        <text x="132" y="85" class="mono-badge" fill="#fca5a5">Price Redaction</text>
+        <rect x="230" y="70" width="95" height="22" rx="6" fill="#4338ca" fill-opacity="0.25" />
+        <text x="242" y="85" class="mono-badge" fill="#a5b4fc">CSV Export</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- Connectors from Tier 1 to Tier 2 -->
+  <path d="M 230 250 L 230 280 L 600 280 L 600 300" fill="none" stroke="#6366f1" stroke-width="2" stroke-dasharray="4,4" />
+  <path d="M 600 250 L 600 300" fill="none" stroke="#6366f1" stroke-width="2" />
+  <path d="M 910 250 L 910 280 L 600 280 L 600 300" fill="none" stroke="#6366f1" stroke-width="2" stroke-dasharray="4,4" />
+
+  <!-- LAYER 2: HTTP HOST & SECURITY LAYER -->
+  <g transform="translate(60, 305)">
+    <text x="0" y="0" class="layer-tag" fill="#c084fc">Tier 2: Spring Boot 3 Web Host &amp; Security Layer (Port 8443)</text>
+    
+    <g transform="translate(0, 15)" filter="url(#cardShadow)">
+      <rect width="1080" height="95" rx="16" fill="url(#cardGrad)" stroke="#c084fc" stroke-width="1.5" stroke-opacity="0.3" />
+      
+      <!-- Sub-card 1: CustomAuthFilter -->
+      <g transform="translate(25, 20)">
+        <rect width="320" height="55" rx="10" fill="#2e1065" fill-opacity="0.4" stroke="#a855f7" stroke-width="1" />
+        <text x="15" y="24" class="card-title" fill="#e9d5ff">CustomAuthFilter (Pure Java)</text>
+        <text x="15" y="42" class="card-subtitle">Zero Spring Security &bull; 32-byte session tokens &bull; Lockouts</text>
+      </g>
+
+      <!-- Sub-card 2: REST Controllers -->
+      <g transform="translate(370, 20)">
+        <rect width="340" height="55" rx="10" fill="#1e1b4b" fill-opacity="0.4" stroke="#818cf8" stroke-width="1" />
+        <text x="15" y="24" class="card-title" fill="#c7d2fe">Spring Boot 3 REST Controllers</text>
+        <text x="15" y="42" class="card-subtitle">Products &bull; Stock Movements &bull; AsOf &bull; Sync &bull; Reports</text>
+      </g>
+
+      <!-- Sub-card 3: Static Asset Host -->
+      <g transform="translate(735, 20)">
+        <rect width="320" height="55" rx="10" fill="#064e3b" fill-opacity="0.4" stroke="#34d399" stroke-width="1" />
+        <text x="15" y="24" class="card-title" fill="#a7f3d0">Static Asset Host (Embedded Tomcat)</text>
+        <text x="15" y="42" class="card-subtitle">Bundled React PWA &bull; Serves / &amp; /assets on Port 8443</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- Connectors from Tier 2 to Tier 3 -->
+  <line x1="600" y1="420" x2="600" y2="445" stroke="#a855f7" stroke-width="2" />
+
+  <!-- LAYER 3: CORE PURE JAVA DOMAIN -->
+  <g transform="translate(60, 450)">
+    <text x="0" y="0" class="layer-tag" fill="#34d399">Tier 3: IWMS Core Pure Java Domain (Zero Framework Imports)</text>
+    
+    <g transform="translate(0, 15)" filter="url(#cardShadow)">
+      <rect width="1080" height="135" rx="16" fill="url(#cardGrad)" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.3" />
+      
+      <!-- Core Element 1: InventoryService -->
+      <g transform="translate(25, 20)">
+        <rect width="250" height="95" rx="12" fill="#0f172a" stroke="#475569" stroke-width="1" />
+        <text x="15" y="24" class="card-title" fill="#38bdf8">InventoryService</text>
+        <text x="15" y="44" class="item-text">&bull; ReentrantReadWriteLock</text>
+        <text x="15" y="62" class="item-text">&bull; ArrayDeque (LIFO Undo)</text>
+        <text x="15" y="80" class="item-text">&bull; TreeMap (Time-Travel)</text>
+      </g>
+
+      <!-- Core Element 2: Collections & Caching -->
+      <g transform="translate(295, 20)">
+        <rect width="245" height="95" rx="12" fill="#0f172a" stroke="#475569" stroke-width="1" />
+        <text x="15" y="24" class="card-title" fill="#818cf8">Collections &amp; Queues</text>
+        <text x="15" y="44" class="item-text">&bull; PriorityQueue (Alerts)</text>
+        <text x="15" y="62" class="item-text">&bull; LinkedHashMap (LRU)</text>
+        <text x="15" y="80" class="item-text">&bull; HashMap (O(1) Catalog)</text>
+      </g>
+
+      <!-- Core Element 3: Strategy Patterns -->
+      <g transform="translate(560, 20)">
+        <rect width="245" height="95" rx="12" fill="#0f172a" stroke="#475569" stroke-width="1" />
+        <text x="15" y="24" class="card-title" fill="#c084fc">Strategy Engines</text>
+        <text x="15" y="44" class="item-text">&bull; Pick: FEFO vs FIFO</text>
+        <text x="15" y="62" class="item-text">&bull; Reorder: LeadTime vs MinMax</text>
+        <text x="15" y="80" class="item-text">&bull; Pricing: Tiered vs Promo</text>
+      </g>
+
+      <!-- Core Element 4: Product Hierarchy & RBAC -->
+      <g transform="translate(825, 20)">
+        <rect width="230" height="95" rx="12" fill="#0f172a" stroke="#475569" stroke-width="1" />
+        <text x="15" y="24" class="card-title" fill="#fbbf24">Model Hierarchy &amp; RBAC</text>
+        <text x="15" y="44" class="item-text">&bull; 4 Product Subclasses</text>
+        <text x="15" y="62" class="item-text">&bull; 3 User Role Subclasses</text>
+        <text x="15" y="80" class="item-text">&bull; Pbkdf2 (100k rounds)</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- Connectors from Tier 3 to Tier 4 -->
+  <line x1="600" y1="605" x2="600" y2="630" stroke="#34d399" stroke-width="2" />
+
+  <!-- LAYER 4: FILE PERSISTENCE & CRASH SAFETY -->
+  <g transform="translate(60, 635)">
+    <text x="0" y="0" class="layer-tag" fill="#f59e0b">Tier 4: File Persistence, WAL &amp; Crash Safety (Zero SQL Database)</text>
+    
+    <g transform="translate(0, 15)" filter="url(#cardShadow)">
+      <rect width="1080" height="75" rx="16" fill="url(#cardGrad)" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.3" />
+      
+      <g transform="translate(30, 24)">
+        <text x="0" y="16" class="card-title" fill="#fde68a">AtomicFileWriter</text>
+        <text x="0" y="32" class="card-subtitle">.tmp staging &bull; getFD().sync() &bull; ATOMIC_MOVE</text>
+      </g>
+
+      <line x1="260" y1="15" x2="260" y2="60" stroke="#334155" stroke-width="1" />
+
+      <g transform="translate(290, 24)">
+        <text x="0" y="16" class="card-title" fill="#fde68a">MovementLedger (WAL)</text>
+        <text x="0" y="32" class="card-subtitle">Append-only ledger.log &bull; Full crash replay</text>
+      </g>
+
+      <line x1="530" y1="15" x2="530" y2="60" stroke="#334155" stroke-width="1" />
+
+      <g transform="translate(560, 24)">
+        <text x="0" y="16" class="card-title" fill="#fde68a">AuditLogger</text>
+        <text x="0" y="32" class="card-subtitle">Tamper-evident operational audit.log</text>
+      </g>
+
+      <line x1="770" y1="15" x2="770" y2="60" stroke="#334155" stroke-width="1" />
+
+      <g transform="translate(800, 24)">
+        <text x="0" y="16" class="card-title" fill="#fde68a">BackupManager</text>
+        <text x="0" y="32" class="card-subtitle">Zip-slip safe &bull; JVM shutdown hook archive</text>
+      </g>
+    </g>
+  </g>
+</svg>

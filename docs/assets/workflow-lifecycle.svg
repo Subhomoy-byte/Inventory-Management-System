@@ -1,0 +1,186 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 480" width="100%" height="100%">
+  <defs>
+    <linearGradient id="wfBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b0f19" />
+      <stop offset="100%" stop-color="#020617" />
+    </linearGradient>
+    <linearGradient id="stepGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6" />
+      <stop offset="100%" stop-color="#1d4ed8" />
+    </linearGradient>
+    <linearGradient id="stepGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8b5cf6" />
+      <stop offset="100%" stop-color="#6d28d9" />
+    </linearGradient>
+    <linearGradient id="stepGrad3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ec4899" />
+      <stop offset="100%" stop-color="#be185d" />
+    </linearGradient>
+    <linearGradient id="stepGrad4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b" />
+      <stop offset="100%" stop-color="#b45309" />
+    </linearGradient>
+    <linearGradient id="stepGrad5" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10b981" />
+      <stop offset="100%" stop-color="#047857" />
+    </linearGradient>
+  </defs>
+
+  <style>
+    .wf-title { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 20px; font-weight: 800; fill: #ffffff; }
+    .wf-subtitle { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 12px; fill: #94a3b8; }
+    .step-num { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 14px; font-weight: 800; fill: #ffffff; }
+    .step-title { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 13px; font-weight: 700; fill: #f8fafc; }
+    .step-body { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 10.5px; fill: #cbd5e1; }
+    .badge { font-family: 'Consolas', monospace; font-size: 9.5px; font-weight: 700; }
+  </style>
+
+  <rect width="1100" height="480" rx="16" fill="url(#wfBg)" />
+
+  <g transform="translate(50, 40)">
+    <text x="0" y="0" class="wf-title">Complete Transaction Lifecycle: Stock Movement &amp; Persistence</text>
+    <text x="0" y="20" class="wf-subtitle">Guaranteed ACID concurrency, Write-Ahead Log crash safety, LIFO undo stack, and atomic disk persistence</text>
+  </g>
+
+  <!-- Step 1 -->
+  <g transform="translate(50, 100)">
+    <rect width="180" height="310" rx="14" fill="#1e293b" stroke="#3b82f6" stroke-width="1.5" stroke-opacity="0.4" />
+    <rect x="15" y="15" width="28" height="28" rx="8" fill="url(#stepGrad1)" />
+    <text x="24" y="34" class="step-num">1</text>
+    <text x="15" y="65" class="step-title">Client Trigger</text>
+    <text x="15" y="85" class="step-body">Floor worker records</text>
+    <text x="15" y="100" class="step-body">Stock In, Out, or Transfer</text>
+    <text x="15" y="115" class="step-body">via PWA or scanner.</text>
+
+    <g transform="translate(15, 145)">
+      <rect width="150" height="42" rx="8" fill="#0f172a" />
+      <text x="10" y="18" class="badge" fill="#60a5fa">POST /api/stock/in</text>
+      <text x="10" y="32" class="badge" fill="#94a3b8">Bearer Token Auth</text>
+    </g>
+
+    <g transform="translate(15, 205)">
+      <rect width="150" height="42" rx="8" fill="#0f172a" />
+      <text x="10" y="18" class="badge" fill="#34d399">If Offline:</text>
+      <text x="10" y="32" class="badge" fill="#cbd5e1">Queues to IndexedDB</text>
+    </g>
+
+    <rect x="15" y="265" width="150" height="26" rx="6" fill="#1e3a8a" fill-opacity="0.5" />
+    <text x="22" y="282" class="badge" fill="#93c5fd">&bull; Idempotent syncId</text>
+  </g>
+
+  <!-- Arrow 1 -> 2 -->
+  <path d="M 235 240 L 265 240" stroke="#475569" stroke-width="2" marker-end="url(#arrow)" />
+
+  <!-- Step 2 -->
+  <g transform="translate(270, 100)">
+    <rect width="180" height="310" rx="14" fill="#1e293b" stroke="#8b5cf6" stroke-width="1.5" stroke-opacity="0.4" />
+    <rect x="15" y="15" width="28" height="28" rx="8" fill="url(#stepGrad2)" />
+    <text x="23" y="34" class="step-num">2</text>
+    <text x="15" y="65" class="step-title">RBAC &amp; Auth</text>
+    <text x="15" y="85" class="step-body">CustomAuthFilter</text>
+    <text x="15" y="100" class="step-body">validates session token</text>
+    <text x="15" y="115" class="step-body">in pure Java (no Spring).</text>
+
+    <g transform="translate(15, 145)">
+      <rect width="150" height="42" rx="8" fill="#0f172a" />
+      <text x="10" y="18" class="badge" fill="#c084fc">EnumSet&lt;Permission&gt;</text>
+      <text x="10" y="32" class="badge" fill="#94a3b8">Fast Bitwise RBAC</text>
+    </g>
+
+    <g transform="translate(15, 205)">
+      <rect width="150" height="42" rx="8" fill="#0f172a" />
+      <text x="10" y="18" class="badge" fill="#fca5a5">Employee Guard:</text>
+      <text x="10" y="32" class="badge" fill="#cbd5e1">Redacts costPrice</text>
+    </g>
+
+    <rect x="15" y="265" width="150" height="26" rx="6" fill="#581c87" fill-opacity="0.5" />
+    <text x="22" y="282" class="badge" fill="#d8b4fe">&bull; 100k rounds PBKDF2</text>
+  </g>
+
+  <!-- Arrow 2 -> 3 -->
+  <path d="M 455 240 L 485 240" stroke="#475569" stroke-width="2" />
+
+  <!-- Step 3 -->
+  <g transform="translate(490, 100)">
+    <rect width="180" height="310" rx="14" fill="#1e293b" stroke="#ec4899" stroke-width="1.5" stroke-opacity="0.4" />
+    <rect x="15" y="15" width="28" height="28" rx="8" fill="url(#stepGrad3)" />
+    <text x="23" y="34" class="step-num">3</text>
+    <text x="15" y="65" class="step-title">Write-Lock &amp; WAL</text>
+    <text x="15" y="85" class="step-body">ReentrantReadWriteLock</text>
+    <text x="15" y="100" class="step-body">writeLock acquired.</text>
+    <text x="15" y="115" class="step-body">Appends to ledger.log.</text>
+
+    <g transform="translate(15, 145)">
+      <rect width="150" height="42" rx="8" fill="#0f172a" />
+      <text x="10" y="18" class="badge" fill="#f472b6">MovementLedger</text>
+      <text x="10" y="32" class="badge" fill="#94a3b8">Append-only WAL log</text>
+    </g>
+
+    <g transform="translate(15, 205)">
+      <rect width="150" height="42" rx="8" fill="#0f172a" />
+      <text x="10" y="18" class="badge" fill="#38bdf8">Crash Proof:</text>
+      <text x="10" y="32" class="badge" fill="#cbd5e1">Pre-commit flush</text>
+    </g>
+
+    <rect x="15" y="265" width="150" height="26" rx="6" fill="#831843" fill-opacity="0.5" />
+    <text x="22" y="282" class="badge" fill="#fbcfe8">&bull; Reentrant Lock</text>
+  </g>
+
+  <!-- Arrow 3 -> 4 -->
+  <path d="M 675 240 L 705 240" stroke="#475569" stroke-width="2" />
+
+  <!-- Step 4 -->
+  <g transform="translate(710, 100)">
+    <rect width="180" height="310" rx="14" fill="#1e293b" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.4" />
+    <rect x="15" y="15" width="28" height="28" rx="8" fill="url(#stepGrad4)" />
+    <text x="23" y="34" class="step-num">4</text>
+    <text x="15" y="65" class="step-title">Collections Update</text>
+    <text x="15" y="85" class="step-body">In-memory domain</text>
+    <text x="15" y="100" class="step-body">indexes updated cleanly</text>
+    <text x="15" y="115" class="step-body">with full safety.</text>
+
+    <g transform="translate(15, 145)">
+      <rect width="150" height="42" rx="8" fill="#0f172a" />
+      <text x="10" y="18" class="badge" fill="#fbbf24">ArrayDeque (Undo)</text>
+      <text x="10" y="32" class="badge" fill="#94a3b8">LIFO Transaction Stack</text>
+    </g>
+
+    <g transform="translate(15, 205)">
+      <rect width="150" height="42" rx="8" fill="#0f172a" />
+      <text x="10" y="18" class="badge" fill="#fbbf24">TreeMap (Timeline)</text>
+      <text x="10" y="32" class="badge" fill="#94a3b8">headMap As-Of Query</text>
+    </g>
+
+    <rect x="15" y="265" width="150" height="26" rx="6" fill="#78350f" fill-opacity="0.5" />
+    <text x="22" y="282" class="badge" fill="#fde68a">&bull; PriorityQueue Alerts</text>
+  </g>
+
+  <!-- Arrow 4 -> 5 -->
+  <path d="M 895 240 L 925 240" stroke="#475569" stroke-width="2" />
+
+  <!-- Step 5 -->
+  <g transform="translate(930, 100)">
+    <rect width="180" height="310" rx="14" fill="#1e293b" stroke="#10b981" stroke-width="1.5" stroke-opacity="0.4" />
+    <rect x="15" y="15" width="28" height="28" rx="8" fill="url(#stepGrad5)" />
+    <text x="23" y="34" class="step-num">5</text>
+    <text x="15" y="65" class="step-title">Atomic Persistence</text>
+    <text x="15" y="85" class="step-body">AtomicFileWriter flushes</text>
+    <text x="15" y="100" class="step-body">via temporary staging</text>
+    <text x="15" y="115" class="step-body">and OS atomic move.</text>
+
+    <g transform="translate(15, 145)">
+      <rect width="150" height="42" rx="8" fill="#0f172a" />
+      <text x="10" y="18" class="badge" fill="#34d399">products.json.tmp</text>
+      <text x="10" y="32" class="badge" fill="#94a3b8">getFD().sync()</text>
+    </g>
+
+    <g transform="translate(15, 205)">
+      <rect width="150" height="42" rx="8" fill="#0f172a" />
+      <text x="10" y="18" class="badge" fill="#34d399">Files.move(...)</text>
+      <text x="10" y="32" class="badge" fill="#94a3b8">ATOMIC_MOVE</text>
+    </g>
+
+    <rect x="15" y="265" width="150" height="26" rx="6" fill="#064e3b" fill-opacity="0.5" />
+    <text x="22" y="282" class="badge" fill="#a7f3d0">&bull; Zero Corruption</text>
+  </g>
+</svg>

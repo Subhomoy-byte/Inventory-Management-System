@@ -8,118 +8,223 @@
 [![Tests](https://img.shields.io/badge/Tests-44%20Passing%20(100%25)-brightgreen)](https://github.com/Subhomoy-byte/Inventory-Management-System)
 [![License](https://img.shields.io/badge/Cost-%240.00%20(100%25%20Free%20%26%20Open%20Source)-blue)](LICENSE)
 
-An industrial-grade, offline-capable, LAN-accessible Inventory and Warehouse Management System engineered to run on any standard PC or server and seamlessly serve mobile floor workers, warehouse terminals, and desktop clients over a Local Area Network (LAN) — **with zero external database requirements, zero cloud dependencies, and 100% free open-source software ($0 cost).**
+An offline-capable, LAN-accessible Inventory and Warehouse Management System engineered to run on any local computer or on-premise server and serve mobile floor workers, warehouse terminals, and desktop workstations over a Local Area Network (LAN) — **with zero external SQL database requirements, zero cloud dependencies, and 100% free open-source software ($0 cost).**
 
 Packaged as a single self-contained executable JAR (`java -jar iwms.jar`), IWMS demonstrates academic Java Object-Oriented Programming (OOP) principles, concurrency control, custom persistence engines, cryptographic security, and offline Progressive Web App (PWA) synchronization.
 
 ---
 
-## Key System Architecture
+## Table of Contents
+1. [Introduction & Problem Statement](#1-introduction--problem-statement)
+2. [Visual System Architecture](#2-visual-system-architecture)
+3. [Colourful Graphic Detailed Workflows](#3-colourful-graphic-detailed-workflows)
+   - [Workflow A: Complete Stock Movement & Persistence Lifecycle](#workflow-a-complete-stock-movement--persistence-lifecycle)
+   - [Workflow B: PWA Offline Outbox & LAN Auto-Sync Engine](#workflow-b-pwa-offline-outbox--lan-auto-sync-engine)
+   - [Workflow C: Time-Travel Inventory Reconstruction (`TreeMap.headMap`)](#workflow-c-time-travel-inventory-reconstruction-treemapheadmap)
+   - [Workflow D: Dynamic RBAC Financial Masking & Price Redaction](#workflow-d-dynamic-rbac-financial-masking--price-redaction)
+4. [Step-by-Step Setup Guide on Any Device](#4-step-by-step-setup-guide-on-any-device)
+   - [Step 1: Check System Requirements](#step-1-check-system-requirements)
+   - [Step 2: Download or Clone the Repository](#step-2-download-or-clone-the-repository)
+   - [Step 3: Build & Package (Single Command)](#step-3-build--package-single-command)
+   - [Step 4: Launch the Server](#step-4-launch-the-server)
+   - [Step 5: Access the Web Application](#step-5-access-the-web-application)
+   - [Step 6: Connect Mobile Phones & Tablets over LAN](#step-6-connect-mobile-phones--tablets-over-lan)
+   - [Step 7: Testing the Offline Mode & Outbox Auto-Sync](#step-7-testing-the-offline-mode--outbox-auto-sync)
+5. [Pre-Seeded Demo User Profiles](#5-pre-seeded-demo-user-profiles)
+6. [Academic Java OOP & CS Concept Mapping](#6-academic-java-oop--cs-concept-mapping)
+7. [Comprehensive REST API Reference](#7-comprehensive-rest-api-reference)
+8. [Automated Verification & Test Suite](#8-automated-verification--test-suite)
+9. [Troubleshooting & FAQ](#9-troubleshooting--faq)
 
+---
+
+## 1. Introduction & Problem Statement
+
+### The Real-World Challenge
+Modern supply chains, logistics facilities, wholesale distribution depots, and remote construction storehouses share a critical vulnerability: **reliance on constant internet connectivity and costly database infrastructures.**
+- Concrete and steel warehouse construction often creates **Wi-Fi dead zones** where cloud-dependent applications fail completely.
+- Commercial warehouse software requires expensive recurring subscriptions, cloud databases (PostgreSQL, Oracle, MySQL), dedicated database administrators, and complex container orchestration.
+- When the internet goes down, warehouse floor picking, receiving, and dispatch operations grind to a halt.
+
+### The IWMS Solution
+IWMS was designed from the ground up to solve these problems while costing **exactly $0.00**:
+- **100% Free & Self-Contained:** Zero database servers, zero cloud bills, zero API fees. Runs directly on the JVM using plain files (`java.nio.file`).
+- **Offline-First PWA Architecture:** Floor workers can walk into Wi-Fi dead zones, record Stock In, Stock Out, or Bin Transfers on mobile devices. The app safely queues actions in browser IndexedDB and automatically syncs with the server the instant Wi-Fi reconnects.
+- **Pure Java Domain Integrity:** The core business rules, algorithms, and persistence engines are written in pure Java 17 with **zero Spring Framework or Jakarta dependencies**.
+- **Industrial Crash Safety:** Uses a temporary-file staging engine with OS disk cache flushes (`FileOutputStream.getFD().sync()`), atomic renames (`ATOMIC_MOVE`), append-only Write-Ahead Logs (WAL), and automated zip-slip-safe ZIP backups.
+- **Physical Floor Count Tooling:** Direct in-browser generation and preview of monochrome A4 physical count sheets with physical count entry boxes, employee signature blocks, and role-based cost price masking.
+
+---
+
+## 2. Visual System Architecture
+
+IWMS is structured into four decoupled architectural tiers:
+
+![IWMS System Architecture](docs/assets/architecture-overview.svg)
+
+```mermaid
+graph TD
+    subgraph Tier1["Tier 1: Client &amp; Device Access (LAN)"]
+        A1["📱 Mobile Handhelds &amp; Tablets<br/>(Floor Picking &amp; Offline Outbox)"]
+        A2["💻 Desktop Workstations<br/>(Executive Analytics &amp; Warehouse Map)"]
+        A3["🖨️ Thermal / Floor Printers<br/>(Monochrome A4 OpenPDF Count Sheets)"]
+    end
+
+    subgraph Tier2["Tier 2: Spring Boot 3 Web Host &amp; Security Layer (Port 8443)"]
+        B1["CustomAuthFilter<br/>(Pure Java Token Validation)"]
+        B2["Spring REST Controllers<br/>(/api/products, /api/stock, /api/sync)"]
+        B3["Embedded Tomcat 10<br/>(Bundled React 19 PWA Static Assets)"]
+    end
+
+    subgraph Tier3["Tier 3: IWMS Core Pure Java Domain (Zero Framework Imports)"]
+        C1["InventoryService<br/>(ReentrantReadWriteLock)"]
+        C2["Collections &amp; Queues<br/>(ArrayDeque Undo, TreeMap Timeline, PriorityQueue Alerts)"]
+        C3["Pluggable Strategies<br/>(FEFO/FIFO Pick, LeadTime Reorders, Tiered Pricing)"]
+        C4["Polymorphic Models &amp; RBAC<br/>(Perishable, Electronic, Fragile, Bulk Products)"]
+    end
+
+    subgraph Tier4["Tier 4: File Persistence, WAL &amp; Crash Safety"]
+        D1["AtomicFileWriter<br/>(.tmp staging + ATOMIC_MOVE)"]
+        D2["MovementLedger WAL<br/>(Append-only ledger.log)"]
+        D3["AuditLogger<br/>(Security audit.log)"]
+        D4["BackupManager<br/>(Zip-slip safe ZIP archives &amp; Shutdown Hook)"]
+    end
+
+    Tier1 -->|HTTP / JSON / PWA| Tier2
+    Tier2 -->|Pure Java Calls| Tier3
+    Tier3 -->|Atomic File I/O| Tier4
 ```
-                                  +---------------------------------------------+
-                                  |              Local Area Network (LAN)       |
-                                  |   Mobile Tablets / Handhelds / Barcode Scanners  |
-                                  +---------------------------------------------+
-                                                         |
-                                                         v
-                                  +---------------------------------------------+
-                                  |          Spring Boot 3 HTTP Host            |
-                                  |   Port 8443 (REST API + Static React PWA)   |
-                                  +---------------------------------------------+
-                                                         |
-                                                         v
-                                  +---------------------------------------------+
-                                  |      CustomAuthFilter (Pure Java Tokens)    |
-                                  |   RBAC: ADMIN / MANAGER / EMPLOYEE           |
-                                  +---------------------------------------------+
-                                                         |
-                                                         v
-  +-----------------------------------------------------------------------------------------------------------+
-  |                                        IWMS CORE PURE JAVA DOMAIN                                         |
-  |                                (Zero Spring / Jakarta Framework Leakage)                                  |
-  |                                                                                                           |
-  |   +--------------------------------+  +---------------------------------+  +--------------------------+   |
-  |   |        InventoryService        |  |         Pluggable Strategies    |  |       OpenPDF Engine     |   |
-  |   |  - ReentrantReadWriteLock      |  |  - Pick: FEFO / FIFO            |  |  - Monochrome A4 Sheets  |   |
-  |   |  - ArrayDeque (LIFO Undo)      |  |  - Alert: MinMax / Expiry       |  |  - Dynamic Cost Redaction|   |
-  |   |  - TreeMap (Time-Travel)       |  |  - Reorder: LeadTime / Velocity |  |  - CSV Importer/Exporter |   |
-  |   |  - PriorityQueue (Alerts)      |  |  - Pricing: Bulk / Promotional  |  |                          |   |
-  |   |  - LinkedHashMap (LRU Cache)   |  +---------------------------------+  +--------------------------+   |
-  |   +--------------------------------+                                                                      |
-  +-----------------------------------------------------------------------------------------------------------+
-                                                         |
-                                                         v
-  +-----------------------------------------------------------------------------------------------------------+
-  |                                       FILE PERSISTENCE & CRASH SAFETY                                     |
-  |                                                                                                           |
-  |   +--------------------------+    +--------------------------+    +-----------------------------------+   |
-  |   |     AtomicFileWriter     |    |   MovementLedger (WAL)   |    |           BackupManager           |   |
-  |   |  - Temporary file staging|    |  - Append-only TSV file  |    |  - Automated ZIP archive          |   |
-  |   |  - OS fsync: getFD().sync|    |  - Crash replay recovery |    |  - Zip-Slip path traversal guard  |   |
-  |   |  - Files.move ATOMIC_MOVE|    |  - AuditLogger security  |    |  - JVM shutdown hook snapshot     |   |
-  |   +--------------------------+    +--------------------------+    +-----------------------------------+   |
-  +-----------------------------------------------------------------------------------------------------------+
+
+---
+
+## 3. Colourful Graphic Detailed Workflows
+
+### Workflow A: Complete Stock Movement & Persistence Lifecycle
+
+Every stock transaction (Inbound, Outbound, Transfer, or Adjustment) follows a strict ACID-compliant pipeline:
+
+![Transaction Lifecycle](docs/assets/workflow-lifecycle.svg)
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Worker as Floor Worker (Mobile / Desktop)
+    participant Filter as CustomAuthFilter
+    participant Service as InventoryService
+    participant WAL as MovementLedger (WAL)
+    participant Memory as In-Memory State (TreeMap/Deque)
+    participant Disk as AtomicFileWriter (products.json)
+
+    Worker->>Filter: POST /api/stock/in (Bearer Token, SKU, Qty, TargetBin)
+    Filter->>Filter: Verify Token & Check RBAC Permissions
+    Filter->>Service: invoke stockIn(...)
+    Service->>Service: acquire writeLock() (ReentrantReadWriteLock)
+    Service->>WAL: appendMovement(StockMovement)
+    WAL-->>Service: Persisted to append-only ledger.log
+    Service->>Memory: Update O(1) HashMap quantity
+    Service->>Memory: Record in TreeMap timeline (asof queries)
+    Service->>Memory: Push transaction onto ArrayDeque (LIFO Undo)
+    Service->>Memory: Re-evaluate PriorityQueue stock alerts
+    Service->>Disk: flushToAtomicFile(products.json)
+    Disk->>Disk: Write to products.json.tmp
+    Disk->>Disk: FileOutputStream.getFD().sync() (OS Flush)
+    Disk->>Disk: Files.move(..., ATOMIC_MOVE, REPLACE_EXISTING)
+    Service->>Service: release writeLock()
+    Service-->>Worker: HTTP 200 OK (Updated ProductDto)
 ```
 
 ---
 
-## Academic Java OOP & CS Concept Mapping
+### Workflow B: PWA Offline Outbox & LAN Auto-Sync Engine
 
-This codebase is specifically architected to serve as a comprehensive, textbook-quality showcase of Java Object-Oriented Programming and Computer Science algorithms. Every concept is implemented in pure Java with zero framework magic:
+When warehouse floor staff enter areas without Wi-Fi coverage, the app switches to offline queueing without interrupting work:
 
-| Java & CS Concept | Exact File Location | Architectural Implementation & Highlights |
-| :--- | :--- | :--- |
-| **Encapsulation** | [`com.iwms.model.Product`](iwms-core/src/main/java/com/iwms/model/Product.java)<br>[`Batch`](iwms-core/src/main/java/com/iwms/model/Batch.java) | All domain fields are `private`; business invariants enforced through constructors and setters; [`StockMovement`](iwms-core/src/main/java/com/iwms/model/StockMovement.java) is completely immutable; collections return unmodifiable defensive views (`Collections.unmodifiableList`). |
-| **Abstraction** | [`com.iwms.model.Product`](iwms-core/src/main/java/com/iwms/model/Product.java) | Abstract root class declaring abstract contracts: `calculateStorageCost(double days)` and `getHandlingRules()`, leaving category-specific implementation to subclasses. |
-| **Inheritance & Polymorphism** | [`PerishableProduct`](iwms-core/src/main/java/com/iwms/model/PerishableProduct.java)<br>[`ElectronicProduct`](iwms-core/src/main/java/com/iwms/model/ElectronicProduct.java)<br>[`FragileProduct`](iwms-core/src/main/java/com/iwms/model/FragileProduct.java)<br>[`BulkProduct`](iwms-core/src/main/java/com/iwms/model/BulkProduct.java) | Specialized subclasses overriding polymorphic behaviors. For example: `PerishableProduct` factors refrigeration coefficients and shelf-life decay into storage costs, while `FragileProduct` enforces specialized air-cushioning and padding overheads. |
-| **Creational Design Pattern: Builder** | [`Product.ProductBuilder`](iwms-core/src/main/java/com/iwms/model/Product.java) | Fluent recursive builder with strict validation verifying positive quantities, non-null SKUs, valid reorder thresholds, and bin locations before instantiation. |
-| **Behavioral Design Pattern: Strategy** | [`PickStrategy`](iwms-core/src/main/java/com/iwms/service/PickStrategy.java)<br>[`AlertStrategy`](iwms-core/src/main/java/com/iwms/service/AlertStrategy.java)<br>[`ReorderStrategy`](iwms-core/src/main/java/com/iwms/service/ReorderStrategy.java)<br>[`PricingStrategy`](iwms-core/src/main/java/com/iwms/service/PricingStrategy.java) | Runtime-interchangeable strategy algorithms for picking, inventory alerts, procurement reorders, and customer pricing without modifying core service classes. |
-| **Interfaces with Multiple Implementations** | Strategy Implementations | &bull; [`FefoPickStrategy`](iwms-core/src/main/java/com/iwms/service/FefoPickStrategy.java) (First-Expired-First-Out) vs [`FifoPickStrategy`](iwms-core/src/main/java/com/iwms/service/FifoPickStrategy.java) (First-In-First-Out)<br>&bull; [`LowStockAlertStrategy`](iwms-core/src/main/java/com/iwms/service/LowStockAlertStrategy.java) vs [`ExpiringBatchAlertStrategy`](iwms-core/src/main/java/com/iwms/service/ExpiringBatchAlertStrategy.java)<br>&bull; [`MinMaxReorderStrategy`](iwms-core/src/main/java/com/iwms/service/MinMaxReorderStrategy.java) vs [`VelocityReorderStrategy`](iwms-core/src/main/java/com/iwms/service/VelocityReorderStrategy.java)<br>&bull; [`AverageCostPricingStrategy`](iwms-core/src/main/java/com/iwms/service/AverageCostPricingStrategy.java) vs [`FifoPricingStrategy`](iwms-core/src/main/java/com/iwms/service/FifoPricingStrategy.java) |
-| **Domain Interfaces** | [`Storable`](iwms-core/src/main/java/com/iwms/model/Storable.java)<br>[`Auditable`](iwms-core/src/main/java/com/iwms/model/Auditable.java)<br>[`Exportable`](iwms-core/src/main/java/com/iwms/model/Exportable.java) | Modular behavior segregation: `Storable` handles volume & storage metrics, `Auditable` exposes tamper-evident identity strings, `Exportable` provides standardized CSV serialization contracts. |
-| **Java Collections Framework** | [`InventoryService`](iwms-core/src/main/java/com/iwms/service/InventoryService.java) | &bull; `HashMap` for O(1) catalog indexing and bin assignment<br>&bull; `TreeMap` for chronological time-travel inventory replay via `headMap(targetInstant)`<br>&bull; `ArrayDeque` for high-performance LIFO undo transaction stack<br>&bull; `PriorityQueue` with custom min/max comparators for alert urgency ranking<br>&bull; `LinkedHashMap` overriding `removeEldestEntry()` for an O(1) LRU recently-viewed SKU cache |
-| **Concurrency & Thread-Safety** | [`InventoryService`](iwms-core/src/main/java/com/iwms/service/InventoryService.java) | `ReentrantReadWriteLock` with separate read locks for simultaneous non-blocking floor readers and write locks ensuring ACID consistency during stock transfers and movements. |
-| **Java Streams & Functional Lambdas** | [`InventoryService`](iwms-core/src/main/java/com/iwms/service/InventoryService.java) | Pipeline operations utilizing `Collectors.groupingBy`, `summingInt`, `summingDouble`, custom comparator chains, and `flatMap` for warehouse valuation and movement analytics. |
-| **Repository Pattern & Polymorphic JSON** | [`Repository`](iwms-core/src/main/java/com/iwms/repository/Repository.java)<br>[`FileBackedRepository`](iwms-core/src/main/java/com/iwms/repository/FileBackedRepository.java) | Generic repository interface with in-memory caching and JSON persistence. Uses Jackson `@JsonTypeInfo` and `@JsonSubTypes` to cleanly persist and reconstruct `Product` polymorphic subclass hierarchies across server restarts. |
-| **Atomic File Persistence** | [`AtomicFileWriter`](iwms-core/src/main/java/com/iwms/storage/AtomicFileWriter.java) | Zero-corruption storage engine: writes data to `.tmp` file, calls OS disk sync `FileOutputStream.getFD().sync()`, and performs atomic file replacement via `Files.move(..., ATOMIC_MOVE, REPLACE_EXISTING)`. |
-| **Write-Ahead Log (WAL)** | [`MovementLedger`](iwms-core/src/main/java/com/iwms/storage/MovementLedger.java) | Immutable append-only transaction ledger (`ledger.log`) recording stock movements before memory commit. Capable of full crash replay and historical state reconstruction. |
-| **Audit Logging** | [`AuditLogger`](iwms-core/src/main/java/com/iwms/storage/AuditLogger.java) | Append-only security and operational audit trail (`audit.log`) tracking actor, action, target entity, outcome, and metadata for compliance. |
-| **Safe Backup & Recovery** | [`BackupManager`](iwms-core/src/main/java/com/iwms/storage/BackupManager.java) | Automated and on-demand compressed ZIP archives of `data/` directory. Features Zip-Slip path traversal vulnerability protection and a registered JVM shutdown hook (`Runtime.getRuntime().addShutdownHook`) for automated snapshots. |
-| **Catalog Seeder** | [`DataSeeder`](iwms-core/src/main/java/com/iwms/storage/DataSeeder.java) | Deterministic startup seeder initializing multi-warehouse topology (Warehouse &rarr; Zones &rarr; Bins) and >200 realistic products with initial stock, batches, and price points. |
-| **User Hierarchy & Dynamic RBAC** | [`User`](iwms-core/src/main/java/com/iwms/model/User.java)<br>[`AdminUser`](iwms-core/src/main/java/com/iwms/model/AdminUser.java)<br>[`ManagerUser`](iwms-core/src/main/java/com/iwms/model/ManagerUser.java)<br>[`EmployeeUser`](iwms-core/src/main/java/com/iwms/model/EmployeeUser.java) | Polymorphic permission modeling using high-efficiency `EnumSet<Permission>`. Enforces strict separation: `EMPLOYEE` accounts can view quantities and bins but have cost prices and profit margins redacted across all APIs and PDFs. |
-| **PBKDF2 Password Cryptography** | [`Pbkdf2Authenticator`](iwms-core/src/main/java/com/iwms/auth/Pbkdf2Authenticator.java) | `PBKDF2WithHmacSHA256` hashing (100,000 iterations, 16-byte secure random salt, constant-time `MessageDigest.isEqual` comparison). Automatically locks accounts for 15 minutes after 5 consecutive failed login attempts. |
-| **Session Token Management** | [`SessionManager`](iwms-core/src/main/java/com/iwms/auth/SessionManager.java) | Cryptographically secure 32-byte URL-safe base64 tokens with 8-hour sliding window expiration and immediate revocation on logout. |
-| **Idempotent Offline Sync Engine** | [`SyncEngine`](iwms-core/src/main/java/com/iwms/sync/SyncEngine.java) | Deduplicates incoming client actions via unique `syncId`. In the event of offline stock conflicts (e.g., negative deficit), records conflict entries into a review log for manager resolution while preserving ledger integrity. |
-| **OpenPDF Floor Report Engine** | [`PdfReportGenerator`](iwms-core/src/main/java/com/iwms/report/PdfReportGenerator.java) | Generates high-contrast monochrome A4 count sheets optimized for thermal or low-ink warehouse floor printers, including count entry boxes, employee signature lines, and dynamic RBAC cost-price masking. |
-| **CSV Catalog Exporter** | [`CsvReportGenerator`](iwms-core/src/main/java/com/iwms/report/CsvReportGenerator.java) | Export and import catalog data in standard CSV format with role-aware financial masking. |
-| **REST API & Web Host** | [`com.iwms.api.controller.*`](iwms-web/src/main/java/com/iwms/api/controller/) | Spring Boot 3 controllers for Auth, Products, Stock In/Out/Transfer/Undo, Time-Travel, Warehouses, Sync, Reports, and Backups. |
-| **Pure Java Custom Auth Filter** | [`CustomAuthFilter`](iwms-web/src/main/java/com/iwms/api/filter/CustomAuthFilter.java) | Lightweight HTTP filter executing token validation via `SessionManager` without heavy Spring Security dependencies, binding authenticated `User` context to request thread. |
-| **Role-Aware DTO Projections** | [`ProductDto`](iwms-web/src/main/java/com/iwms/api/dto/ProductDto.java) | Server-side field filtering that omits `costPrice` when the requesting user has the `EMPLOYEE` role. |
-| **Custom Domain Exceptions** | [`com.iwms.exception.*`](iwms-core/src/main/java/com/iwms/exception/) | Checked exceptions ([`InsufficientStockException`](iwms-core/src/main/java/com/iwms/exception/InsufficientStockException.java), [`DuplicateSkuException`](iwms-core/src/main/java/com/iwms/exception/DuplicateSkuException.java), [`StorageException`](iwms-core/src/main/java/com/iwms/exception/StorageException.java), [`SyncConflictException`](iwms-core/src/main/java/com/iwms/exception/SyncConflictException.java)) and unchecked exceptions ([`UnauthorizedException`](iwms-core/src/main/java/com/iwms/exception/UnauthorizedException.java), [`ForbiddenException`](iwms-core/src/main/java/com/iwms/exception/ForbiddenException.java)). |
-| **Glassmorphism UI Shell** | [`App.tsx`](iwms-ui/src/App.tsx)<br>[`index.css`](iwms-ui/src/index.css) | Frosted glass design (`backdrop-blur-xl`), animated gradient ambient blobs, dark/light theme switcher with `localStorage` persistence, responsive mobile-friendly layout. |
-| **Floating Glass Dock** | [`Dock.tsx`](iwms-ui/src/components/layout/Dock.tsx) | macOS-inspired floating navigation dock with tab scaling, hover tooltips, and live pending offline sync count badges. |
-| **Client-Side RBAC & Quick Login** | [`LoginPage.tsx`](iwms-ui/src/pages/LoginPage.tsx)<br>[`AuthContext.tsx`](iwms-ui/src/context/AuthContext.tsx) | Responsive login screen with 1-click Admin, Manager, and Employee demo profile switchers and session state persistence. |
-| **PWA Offline Storage & Sync Engine** | [`db.ts`](iwms-ui/src/storage/db.ts)<br>[`sync.ts`](iwms-ui/src/storage/sync.ts) | IndexedDB (`idb`) outbox write-queueing, optimistic local stock adjustments, automatic background drain upon `online` network detection, and manager conflict triage panel. |
-| **2D Warehouse Topology Map** | [`WarehouseMapPage.tsx`](iwms-ui/src/pages/WarehouseMapPage.tsx) | Visual 2D floor grid showing Zones, Bins, utilization fill percentage bars, color-coded threshold alerts, and bin inspection drawer. |
-| **Real-time Inventory Management** | [`DashboardPage.tsx`](iwms-ui/src/pages/DashboardPage.tsx)<br>[`InventoryPage.tsx`](iwms-ui/src/pages/InventoryPage.tsx) | Recharts category allocation, low-stock radar, searchable/filterable glass data table, pagination, and instant Stock In/Out/Transfer modal. |
-| **Time-Travel Ledger & LIFO Undo** | [`MovementsPage.tsx`](iwms-ui/src/pages/MovementsPage.tsx) | Interactive scrubbable time-travel slider querying `TreeMap.headMap()` to reconstruct inventory levels at any past instant; 1-click `ArrayDeque` undo button. |
-| **Purchase Order Receiving** | [`OrdersPage.tsx`](iwms-ui/src/pages/OrdersPage.tsx) | Purchase order creation, supplier tracking, delivery dates, and 1-click dock receiving with automatic stock-in execution. |
-| **Guided Cycle Count & Reconciliation** | [`CycleCountPage.tsx`](iwms-ui/src/pages/CycleCountPage.tsx) | Physical floor audit sheet with real-time variance computation (`Counted - System`) and 1-click ledger reconciliation. |
-| **OpenPDF Live Preview & ZIP Backups** | [`ReportsPage.tsx`](iwms-ui/src/pages/ReportsPage.tsx) | In-browser preview of monochrome A4 count sheets, CSV downloads, and on-demand zip-slip-safe compressed backups. |
-| **Global Command Palette** | [`CommandPalette.tsx`](iwms-ui/src/components/CommandPalette.tsx) | `Ctrl + K` global modal for instant keyboard navigation across all screens and rapid SKU search. |
+![Offline PWA Sync Engine](docs/assets/offline-sync-engine.svg)
+
+```mermaid
+flowchart LR
+    subgraph MobileDevice["Mobile Tablet / Scanner"]
+        A["Worker Records Movement"] --> B{"Is Network Online?"}
+        B -->|Yes| C["Send Directly to REST API<br/>POST /api/stock/in"]
+        B -->|No| D["Generate Unique syncId"]
+        D --> E["Queue into IndexedDB 'outbox'"]
+        E --> F["Optimistically Update Local Stock Display"]
+        F --> G["Increment Floating Dock Badge (+1)"]
+        G --> H["Network Reconnected Event<br/>window.addEventListener('online')"]
+        H --> I["Drain Outbox Batch<br/>POST /api/sync/batch"]
+    end
+
+    subgraph Server["IWMS Spring Boot Host"]
+        I --> J["SyncEngine.processBatch(...)"]
+        J --> K{"Is syncId Duplicate?"}
+        K -->|Yes| L["Ignore Idempotently"]
+        K -->|No| M{"Does Stock Meet Demand?"}
+        M -->|Yes| N["Append to WAL &amp; Commit"]
+        M -->|No (Deficit)| O["Record into SyncConflict Registry"]
+        N --> P["HTTP 200 OK Response"]
+        O --> P
+    end
+
+    P --> Q["Clear Synced Items from IndexedDB"]
+    O --> R["Surfaced in Manager Conflict Review Panel"]
+```
 
 ---
 
-## Quickstart Guide
+### Workflow C: Time-Travel Inventory Reconstruction (`TreeMap.headMap`)
 
-### Prerequisites
-- **Java Development Kit (JDK):** Version 17 or higher (tested on JDK 17, 21, and 26).
-- **Maven:** Version 3.8+ (or use the included `mvnw` wrapper).
-- *(Optional)* **Node.js & npm:** Only needed if modifying frontend source files in `iwms-ui/`. The production static web assets are already compiled and bundled directly into the executable JAR!
+How IWMS reconstructs historical inventory levels at any historical second without storing redundant snapshot tables:
+
+```mermaid
+flowchart TD
+    A["User scrubs Time-Travel Slider to past instant: T_target"] --> B["Frontend calls GET /api/stock/asof?timestamp=T_target"]
+    B --> C["InventoryService acquires readLock()"]
+    C --> D["Query ledgerTimeline.headMap(T_target, true)"]
+    D --> E["Iterate through historical movements from origin to T_target"]
+    E --> F["Replay: Add Inbound, Subtract Outbound, Shift Transfers"]
+    F --> G["Compute exact historical on-hand quantities for all SKUs"]
+    G --> H["Return JSON Map of SKU to Quantity"]
+    H --> I["Frontend renders historical snapshot with variance deltas (+/-)"]
+```
 
 ---
 
-### Step 1: Clone the Repository
+### Workflow D: Dynamic RBAC Financial Masking & Price Redaction
+
+Security enforcement operates at the domain, controller, and reporting layers to safeguard commercial margins:
+
+```mermaid
+flowchart TD
+    A["Request: View Product Catalog or Floor PDF"] --> B["Extract Session Token &amp; User Role"]
+    B --> C{"Role Check"}
+    C -->|ADMIN or MANAGER| D["Include Full Cost Prices &amp; Profit Margins"]
+    C -->|EMPLOYEE| E["Trigger Dynamic Financial Redaction"]
+    E --> F["ProductDto: costPrice = null"]
+    E --> G["React UI: Render 'Cost Masked' Pill"]
+    E --> H["OpenPDF Engine: Suppress Unit Cost Column, Show Count Boxes Only"]
+```
+
+---
+
+## 4. Step-by-Step Setup Guide on Any Device
+
+Follow these instructions to run IWMS on any computer (Windows, macOS, or Linux).
+
+![Device Setup Guide](docs/assets/device-setup-guide.svg)
+
+### Step 1: Check System Requirements
+IWMS requires only the standard Java Runtime Environment:
+- **Java:** JDK 17, 21, or 26 installed.
+- Check by opening a terminal / command prompt:
+  ```bash
+  java -version
+  ```
+  *If Java is not installed, download the free OpenJDK from [adoptium.net](https://adoptium.net/).*
+
+---
+
+### Step 2: Download or Clone the Repository
+On the target machine, clone the repository:
 ```bash
 git clone https://github.com/Subhomoy-byte/Inventory-Management-System.git
 cd Inventory-Management-System
@@ -127,150 +232,227 @@ cd Inventory-Management-System
 
 ---
 
-### Step 2: Build the Multi-Module Project
-Run the Maven package command from the repository root:
-```bash
-mvn clean package
-```
-*(Windows PowerShell equivalent: `.\mvnw.cmd clean package`)*
+### Step 3: Build & Package (Single Command)
+Run Maven to build the multi-module project and package the fat JAR:
 
-This compiles all modules, runs all 44 JUnit 5 unit and integration tests, and bundles the application into a standalone fat JAR at `iwms-web/target/iwms.jar`.
+- **Windows (PowerShell or CMD):**
+  ```powershell
+  .\mvnw.cmd clean package
+  ```
+- **macOS / Linux:**
+  ```bash
+  ./mvnw clean package
+  ```
+
+*(If you have Maven installed globally, you can simply run `mvn clean package`)*
+
+This compiles all pure Java classes, runs all 44 unit and integration tests, and packages the entire Spring Boot host and React PWA into a single fat JAR:
+```
+iwms-web/target/iwms.jar  (~25 MB)
+```
 
 ---
 
-### Step 3: Run the Standalone Executable JAR
-Launch the system with a single command:
+### Step 4: Launch the Server
+Execute the JAR with a single command:
 ```bash
 java -jar iwms-web/target/iwms.jar
 ```
 
-The system will start in ~5 seconds and output:
+In approximately 5 to 6 seconds, you will see the Spring Boot banner:
 ```
-Tomcat initialized with port 8443 (http)
-Adding welcome page: class path resource [static/index.html]
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.5)
+
 Tomcat started on port 8443 (http) with context path ''
-Started IwmsApplication in 6.03 seconds
+Started IwmsApplication in 5.8 seconds
 ```
 
 ---
 
-### Step 4: Open in Your Browser
-Open your browser and navigate to:
+### Step 5: Access the Web Application
+Open any web browser on the host machine and visit:
 ```
 http://localhost:8443
 ```
+You will be greeted by the Glassmorphism Login Screen with pre-configured 1-click demo login buttons.
 
 ---
 
-## Pre-Seeded Demo User Profiles
+### Step 6: Connect Mobile Phones & Tablets over LAN
+To use IWMS on warehouse tablets, smartphones, or mobile barcode scanners:
 
-On startup, IWMS automatically provisions three test accounts with pre-configured RBAC roles:
+1. **Find the Host Computer's Local IP:**
+   - **Windows:** Run `ipconfig` (look for `IPv4 Address`, e.g., `192.168.1.50`).
+   - **macOS / Linux:** Run `ifconfig` or `ip a` (e.g., `192.168.1.50`).
 
-| Role | Username | Password | Permissions & System Privileges |
+2. **Connect the Mobile Device:**
+   - Connect the phone/tablet to the **same Wi-Fi network** as the host computer.
+   - Open Chrome, Safari, or Firefox on the phone and navigate to:
+     ```
+     http://<HOST_IP>:8443
+     ```
+     *(Example: `http://192.168.1.50:8443`)*
+
+3. **Install as a Standalone App (PWA):**
+   - **Android Chrome:** Tap the browser menu `⋮` &rarr; select **"Add to Home Screen"** or **"Install App"**.
+   - **iOS Safari:** Tap the Share button &rarr; select **"Add to Home Screen"**.
+   - The app now launches in full-screen native mode without browser address bars!
+
+---
+
+### Step 7: Testing the Offline Mode & Outbox Auto-Sync
+You can test the offline capabilities in 30 seconds:
+
+1. On your mobile phone or browser, log in as `employee` (`emp123`).
+2. Turn on **Airplane Mode** (or disconnect your Wi-Fi).
+3. Notice the top status badge instantly changes to **"Offline Mode" (Amber Pulse)**.
+4. Record several stock movements (e.g., Stock In 25 units of SKU `PROD-ELEC-001`).
+5. Open the **Sync Outbox** tab on the dock &mdash; see your pending transactions queued in browser IndexedDB.
+6. Turn **Airplane Mode OFF** (reconnect Wi-Fi).
+7. Notice the badge turns green (**"LAN Online"**) and the system automatically flushes the queue to the server with zero manual intervention!
+
+---
+
+## 5. Pre-Seeded Demo User Profiles
+
+On startup, IWMS automatically provisions three user profiles:
+
+| Role | Username | Password | System Privileges & Permissions |
 | :--- | :--- | :--- | :--- |
-| **Admin** | `admin` | `admin123` | **Full Administrative Privileges:** Unrestricted access, unmasked cost prices & profit margins, user management, ZIP backup creation, system settings. |
-| **Manager** | `manager` | `manager123` | **Operational Management:** Stock movements, purchase order creation/receiving, cycle count reconciliation, conflict review, floor reports with financial columns. |
+| **Admin** | `admin` | `admin123` | **Full Unrestricted Control:** Full access to all catalog products, cost prices, profit margins, user lockouts, ZIP backups, and administrative settings. |
+| **Manager** | `manager` | `manager123` | **Warehouse Management:** Stock operations, purchase order creation/receiving, cycle count reconciliation, conflict review, floor reports with financial columns. |
 | **Employee** | `employee` | `emp123` | **Floor Operations:** Stock In/Out/Transfer, physical floor counts. **Strictly Redacted:** Cost prices and profit margins are masked across all screens, API responses, and generated PDF reports. |
 
 > **Tip:** The Login screen features 1-click quick-fill buttons for each role.
 
 ---
 
-## Local Area Network (LAN) & Mobile Access Guide
+## 6. Academic Java OOP & CS Concept Mapping
 
-IWMS is designed to operate seamlessly across an offline warehouse or facility Local Area Network:
+This codebase is specifically architected to serve as a textbook-quality showcase of Java Object-Oriented Programming and Computer Science algorithms:
 
-1. **Find Host PC IP Address:**
-   - **Windows:** Run `ipconfig` in PowerShell (e.g., `192.168.1.50`).
-   - **Linux / macOS:** Run `ifconfig` or `ip a`.
-
-2. **Connect Floor Devices:**
-   - Ensure warehouse tablets, barcode scanners, and mobile phones are connected to the same Wi-Fi router (no internet required).
-   - On the mobile browser, visit:
-     ```
-     http://<HOST_IP>:8443
-     ```
-     *(Example: `http://192.168.1.50:8443`)*
-
-3. **Offline Mode & Auto-Sync:**
-   - If a floor worker walks into a dead zone or disconnected area, IWMS automatically switches to **Offline Mode**.
-   - Workers can continue recording Stock In, Stock Out, and Transfers — operations are queued safely in browser IndexedDB.
-   - When the worker returns within Wi-Fi range, IWMS automatically flushes the outbox queue to the server with zero data loss!
-
----
-
-## Comprehensive REST API Endpoints
-
-All endpoints (except login) require `Authorization: Bearer <token>`:
-
-### Authentication
-- `POST /api/auth/login`: Authenticate with username and password; returns session token and role details.
-- `POST /api/auth/logout`: Revoke active session token.
-
-### Products & Catalog
-- `GET /api/products`: Retrieve all products (cost prices dynamically masked for `EMPLOYEE`).
-- `GET /api/products/{id}`: Retrieve product by ID.
-- `GET /api/products/search?query={q}`: Real-time search across SKUs, names, and descriptions.
-
-### Stock Operations
-- `POST /api/stock/in`: Record inbound stock receipt.
-- `POST /api/stock/out`: Record outbound stock dispatch.
-- `POST /api/stock/transfer`: Move stock between warehouse bins.
-- `POST /api/stock/undo`: LIFO undo of the last stock movement.
-- `GET /api/stock/movements`: Retrieve sequential transaction ledger.
-- `GET /api/stock/asof?timestamp={iso}`: Query reconstructed inventory snapshot at any historical instant via `TreeMap.headMap()`.
-
-### Warehouses & Topology
-- `GET /api/warehouses`: Retrieve full warehouse topology hierarchy (Warehouse &rarr; Zones &rarr; Bins).
-
-### Offline Sync
-- `POST /api/sync/batch`: Process batch of queued offline transactions with idempotent deduplication.
-- `GET /api/sync/conflicts`: Retrieve unresolved inventory deficit conflicts.
-
-### Reports & Backups
-- `GET /api/reports/summary.pdf`: Stream monochrome OpenPDF floor count sheet (role-aware cost masking).
-- `GET /api/reports/catalog.csv`: Export catalog as CSV file.
-- `POST /api/backups/create`: Generate timestamped ZIP backup of `data/` directory.
+| Java & CS Concept | Exact File Location | Architectural Implementation & Highlights |
+| :--- | :--- | :--- |
+| **Encapsulation** | [`com.iwms.model.Product`](iwms-core/src/main/java/com/iwms/model/Product.java)<br>[`Batch`](iwms-core/src/main/java/com/iwms/model/Batch.java) | All fields private; validation in constructors/setters; immutable [`StockMovement`](iwms-core/src/main/java/com/iwms/model/StockMovement.java); unmodifiable collection views |
+| **Abstraction** | [`com.iwms.model.Product`](iwms-core/src/main/java/com/iwms/model/Product.java) | Abstract class declaring abstract methods (`calculateStorageCost()`, `getHandlingRules()`) |
+| **Inheritance & Polymorphism** | [`PerishableProduct`](iwms-core/src/main/java/com/iwms/model/PerishableProduct.java)<br>[`ElectronicProduct`](iwms-core/src/main/java/com/iwms/model/ElectronicProduct.java)<br>[`FragileProduct`](iwms-core/src/main/java/com/iwms/model/FragileProduct.java)<br>[`BulkProduct`](iwms-core/src/main/java/com/iwms/model/BulkProduct.java) | Subclasses overriding storage cost calculation and specialized handling rules |
+| **Builder Design Pattern** | [`Product.ProductBuilder`](iwms-core/src/main/java/com/iwms/model/Product.java) | Fluent recursive builder pattern enforcing parameter validation |
+| **Strategy Design Pattern** | [`PickStrategy`](iwms-core/src/main/java/com/iwms/service/PickStrategy.java)<br>[`AlertStrategy`](iwms-core/src/main/java/com/iwms/service/AlertStrategy.java)<br>[`ReorderStrategy`](iwms-core/src/main/java/com/iwms/service/ReorderStrategy.java)<br>[`PricingStrategy`](iwms-core/src/main/java/com/iwms/service/PricingStrategy.java) | Pluggable strategy algorithms with runtime substitution |
+| **Interfaces with 2+ Impls** | Strategy implementations | [`FefoPickStrategy`](iwms-core/src/main/java/com/iwms/service/FefoPickStrategy.java) vs [`FifoPickStrategy`](iwms-core/src/main/java/com/iwms/service/FifoPickStrategy.java); [`LowStockAlertStrategy`](iwms-core/src/main/java/com/iwms/service/LowStockAlertStrategy.java) vs [`ExpiringBatchAlertStrategy`](iwms-core/src/main/java/com/iwms/service/ExpiringBatchAlertStrategy.java); [`MinMaxReorderStrategy`](iwms-core/src/main/java/com/iwms/service/MinMaxReorderStrategy.java) vs [`VelocityReorderStrategy`](iwms-core/src/main/java/com/iwms/service/VelocityReorderStrategy.java); [`AverageCostPricingStrategy`](iwms-core/src/main/java/com/iwms/service/AverageCostPricingStrategy.java) vs [`FifoPricingStrategy`](iwms-core/src/main/java/com/iwms/service/FifoPricingStrategy.java) |
+| **Domain Interfaces** | [`Storable`](iwms-core/src/main/java/com/iwms/model/Storable.java)<br>[`Auditable`](iwms-core/src/main/java/com/iwms/model/Auditable.java)<br>[`Exportable`](iwms-core/src/main/java/com/iwms/model/Exportable.java) | Behavioral contracts for storage metrics, tamper-evident audit strings, and CSV serialization |
+| **Java Collections** | [`InventoryService`](iwms-core/src/main/java/com/iwms/service/InventoryService.java) | `HashMap` for O(1) catalog/bins; `TreeMap` for time-travel ledger (`headMap`); `ArrayDeque` for LIFO undo stack; `PriorityQueue` for alert urgency; `LinkedHashMap` for LRU cache |
+| **Concurrency** | [`InventoryService`](iwms-core/src/main/java/com/iwms/service/InventoryService.java) | `ReentrantReadWriteLock` with separate readLock for concurrent floor readers and writeLock for atomic stock transitions |
+| **Streams & Lambdas** | [`InventoryService`](iwms-core/src/main/java/com/iwms/service/InventoryService.java) | `Collectors.groupingBy`, `summingDouble`, `summingInt`, `flatMap`, custom comparator sorting for valuations |
+| **Repository Pattern** | [`Repository`](iwms-core/src/main/java/com/iwms/repository/Repository.java)<br>[`FileBackedRepository`](iwms-core/src/main/java/com/iwms/repository/FileBackedRepository.java) | Generic repository abstraction with in-memory concurrent caching and atomic JSON file persistence with polymorphic deserialization |
+| **Atomic File Persistence** | [`AtomicFileWriter`](iwms-core/src/main/java/com/iwms/storage/AtomicFileWriter.java) | Prevents corruption via `.tmp` staging, OS disk cache sync (`getFD().sync()`), and atomic rename (`ATOMIC_MOVE`) |
+| **Write-Ahead Log (WAL)** | [`MovementLedger`](iwms-core/src/main/java/com/iwms/storage/MovementLedger.java) | Append-only sequential TSV log for immutable stock movements and crash-recovery state replay |
+| **Audit Logging** | [`AuditLogger`](iwms-core/src/main/java/com/iwms/storage/AuditLogger.java) | Append-only security and operational audit trail tracking actor, action, target, outcome, and metadata |
+| **Backup & Recovery** | [`BackupManager`](iwms-core/src/main/java/com/iwms/storage/BackupManager.java) | Automated and on-demand compressed ZIP backups of `data/`, zip-slip prevention, and JVM shutdown hook |
+| **Data Seeder** | [`DataSeeder`](iwms-core/src/main/java/com/iwms/storage/DataSeeder.java) | Idempotent bootstrap seeding of warehouse topology (Warehouse -> Zones -> Bins) and >200 realistic products with initial stock |
+| **User Hierarchy & RBAC** | [`User`](iwms-core/src/main/java/com/iwms/model/User.java)<br>[`AdminUser`](iwms-core/src/main/java/com/iwms/model/AdminUser.java)<br>[`ManagerUser`](iwms-core/src/main/java/com/iwms/model/ManagerUser.java)<br>[`EmployeeUser`](iwms-core/src/main/java/com/iwms/model/EmployeeUser.java) | Polymorphic permissions using high-performance `EnumSet<Permission>`; employee role strictly masks financial costs and margins |
+| **PBKDF2 Cryptography** | [`Pbkdf2Authenticator`](iwms-core/src/main/java/com/iwms/auth/Pbkdf2Authenticator.java) | `PBKDF2WithHmacSHA256` (100,000 iterations, 16-byte salt, constant-time compare, 5-attempt automatic 15-minute account lockout) |
+| **Session Management** | [`SessionManager`](iwms-core/src/main/java/com/iwms/auth/SessionManager.java) | Cryptographically secure 32-byte URL-safe tokens, 8-hour sliding window expiry, and immediate revocation |
+| **Offline Sync Engine** | [`SyncEngine`](iwms-core/src/main/java/com/iwms/sync/SyncEngine.java) | Idempotent deduplication of queued client actions via `syncId`, automated conflict logging on inventory deficits for manager resolution |
+| **OpenPDF Floor Reports** | [`PdfReportGenerator`](iwms-core/src/main/java/com/iwms/report/PdfReportGenerator.java) | High-contrast monochrome A4 physical count sheets with physical count boxes, signature blocks, and dynamic RBAC price redaction |
+| **CSV Catalog Exporter** | [`CsvReportGenerator`](iwms-core/src/main/java/com/iwms/report/CsvReportGenerator.java) | Product catalog CSV export with role-aware cost price masking and CSV parsing round-trip |
+| **REST API & Web Host** | [`com.iwms.api.controller.*`](iwms-web/src/main/java/com/iwms/api/controller/) | Spring Boot 3 controllers for Auth, Products, Stock In/Out/Transfer/Undo, Time-Travel, Warehouses, Sync, and Reports |
+| **Lightweight Custom Auth Filter** | [`CustomAuthFilter`](iwms-web/src/main/java/com/iwms/api/filter/CustomAuthFilter.java) | Pure Java token validation via `SessionManager` without heavy Spring Security dependency, binding context `User` |
+| **Role-Aware DTO Projections** | [`ProductDto`](iwms-web/src/main/java/com/iwms/api/dto/ProductDto.java) | Dynamic field-level projection stripping sensitive `costPrice` and margin data for `EMPLOYEE` role clients |
+| **Custom Domain Exceptions** | [`com.iwms.exception.*`](iwms-core/src/main/java/com/iwms/exception/) | Checked exceptions ([`InsufficientStockException`](iwms-core/src/main/java/com/iwms/exception/InsufficientStockException.java), [`DuplicateSkuException`](iwms-core/src/main/java/com/iwms/exception/DuplicateSkuException.java), [`StorageException`](iwms-core/src/main/java/com/iwms/exception/StorageException.java), [`SyncConflictException`](iwms-core/src/main/java/com/iwms/exception/SyncConflictException.java)) and unchecked exceptions ([`UnauthorizedException`](iwms-core/src/main/java/com/iwms/exception/UnauthorizedException.java), [`ForbiddenException`](iwms-core/src/main/java/com/iwms/exception/ForbiddenException.java)) |
+| **Glassmorphism UI Shell** | [`App.tsx`](iwms-ui/src/App.tsx)<br>[`index.css`](iwms-ui/src/index.css) | Frosted glass containers (`backdrop-blur-xl`), animated gradient mesh, responsive layout, dark/light theme |
+| **Floating Glass Dock** | [`Dock.tsx`](iwms-ui/src/components/layout/Dock.tsx) | macOS-inspired floating navigation dock with tooltips, active tab scaling, and pending sync count badges |
+| **Client-Side RBAC & Quick Login** | [`LoginPage.tsx`](iwms-ui/src/pages/LoginPage.tsx)<br>[`AuthContext.tsx`](iwms-ui/src/context/AuthContext.tsx) | Responsive login screen with 1-click Admin, Manager, and Employee credential fillers, secure token storage |
+| **PWA Offline Storage & Sync Engine** | [`db.ts`](iwms-ui/src/storage/db.ts)<br>[`sync.ts`](iwms-ui/src/storage/sync.ts) | IndexedDB (`idb`) outbox queue, optimistic offline stock mutations, automated LAN reconnect flush, deficit conflict triage |
+| **2D Warehouse Topology Map** | [`WarehouseMapPage.tsx`](iwms-ui/src/pages/WarehouseMapPage.tsx) | Interactive 2D floor grid visualizing Zones, Bins, utilization fill percentages, and item inspection drawer |
+| **Real-time Inventory Management** | [`DashboardPage.tsx`](iwms-ui/src/pages/DashboardPage.tsx)<br>[`InventoryPage.tsx`](iwms-ui/src/pages/InventoryPage.tsx) | Recharts category analytics, low stock radar, glass data table with search, category/status filters, and stock In/Out/Transfer modal |
+| **Time-Travel Ledger & LIFO Undo** | [`MovementsPage.tsx`](iwms-ui/src/pages/MovementsPage.tsx) | Scrubbable timeline querying `TreeMap.headMap()` for historical stock snapshots at any past minute; 1-click `ArrayDeque` undo |
+| **Purchase Order Receiving** | [`OrdersPage.tsx`](iwms-ui/src/pages/OrdersPage.tsx) | PO creation, supplier tracking, expected delivery dates, and 1-click dock receiving with automatic stock-in mutations |
+| **Guided Cycle Count & Reconciliation** | [`CycleCountPage.tsx`](iwms-ui/src/pages/CycleCountPage.tsx) | Physical floor audit sheet with instant surplus/deficit variance calculations and 1-click ledger reconciliation |
+| **OpenPDF Live Preview & ZIP Backups** | [`ReportsPage.tsx`](iwms-ui/src/pages/ReportsPage.tsx) | In-browser preview of monochrome A4 count sheets, CSV downloads, and on-demand zip-slip-safe compressed backups |
+| **Global Command Palette** | [`CommandPalette.tsx`](iwms-ui/src/components/CommandPalette.tsx) | `Ctrl + K` spotlight modal for instant keyboard navigation across all screens and rapid SKU search |
 
 ---
 
-## Verification & Testing Suite
+## 7. Comprehensive REST API Reference
 
-IWMS maintains **100% test pass rate across 44 unit and integration tests**:
+All requests (except `/api/auth/login`) require the HTTP header:
+```
+Authorization: Bearer <session-token>
+```
+
+| Method | Endpoint | Description | Role Access |
+| :--- | :--- | :--- | :--- |
+| `POST` | `/api/auth/login` | Authenticate with username and password | Public |
+| `POST` | `/api/auth/logout` | Invalidate active session token | Authenticated |
+| `GET` | `/api/products` | Retrieve catalog (costs masked for Employee) | Authenticated |
+| `GET` | `/api/products/{id}` | Retrieve single product details | Authenticated |
+| `GET` | `/api/products/search?query=...` | Search catalog by SKU or title | Authenticated |
+| `POST` | `/api/stock/in` | Record inbound stock arrival | Authenticated |
+| `POST` | `/api/stock/out` | Record outbound stock dispatch | Authenticated |
+| `POST` | `/api/stock/transfer` | Move inventory between bins | Authenticated |
+| `POST` | `/api/stock/undo` | Undo the last stock movement via `ArrayDeque` | Manager, Admin |
+| `GET` | `/api/stock/movements` | Retrieve sequential WAL movement ledger | Authenticated |
+| `GET` | `/api/stock/asof?timestamp=...` | Query historical inventory snapshot via `TreeMap` | Authenticated |
+| `GET` | `/api/warehouses` | Retrieve full facility topology (Zones &amp; Bins) | Authenticated |
+| `POST` | `/api/sync/batch` | Idempotent batch processing of offline mutations | Authenticated |
+| `GET` | `/api/sync/conflicts` | List unresolved deficit conflicts | Manager, Admin |
+| `GET` | `/api/reports/summary.pdf` | Stream monochrome A4 floor count sheet PDF | Authenticated |
+| `GET` | `/api/reports/catalog.csv` | Export catalog in standard CSV format | Authenticated |
+| `POST` | `/api/backups/create` | Trigger on-demand compressed ZIP backup | Admin |
+
+---
+
+## 8. Automated Verification & Test Suite
+
+IWMS maintains a **100% test pass rate across 44 unit and integration tests**:
 
 ```bash
 mvn test
 ```
 
-### Test Suite Breakdown
-- `com.iwms.SmokeTest`: Reactor verification (1 test)
-- `com.iwms.model.ProductHierarchyTest`: Encapsulation, builder validation, polymorphism, storage costs (7 tests)
-- `com.iwms.service.StrategyTests`: Strategy patterns for FIFO/FEFO picking, alerts, reorders, pricing (6 tests)
-- `com.iwms.service.InventoryServiceTest`: Concurrency, undo stack, time travel, LRU cache, stream analytics (8 tests)
-- `com.iwms.storage.FilePersistenceTest`: Atomic file writes, WAL append & replay, audit logging, backup/restore, seeder (6 tests)
-- `com.iwms.auth.AuthAndSyncTest`: PBKDF2 cryptography, lockout policy, RBAC hierarchy, offline sync deduplication (6 tests)
-- `com.iwms.report.ReportGeneratorTest`: OpenPDF generation, employee cost price masking, CSV export/import (3 tests)
-- `com.iwms.api.ApiControllerTests`: Spring Boot REST API integration, custom auth filter, role projections, PDF streaming (7 tests)
+### Test Suite Summary
+```
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running com.iwms.auth.AuthAndSyncTest (6 tests - PASSED)
+[INFO] Running com.iwms.model.ProductHierarchyTest (7 tests - PASSED)
+[INFO] Running com.iwms.report.ReportGeneratorTest (3 tests - PASSED)
+[INFO] Running com.iwms.service.InventoryServiceTest (8 tests - PASSED)
+[INFO] Running com.iwms.service.StrategyTests (6 tests - PASSED)
+[INFO] Running com.iwms.SmokeTest (1 test - PASSED)
+[INFO] Running com.iwms.storage.FilePersistenceTest (6 tests - PASSED)
+[INFO] Running com.iwms.api.ApiControllerTests (7 tests - PASSED)
+[INFO] 
+[INFO] Results:
+[INFO] Tests run: 44, Failures: 0, Errors: 0, Skipped: 0
+[INFO] BUILD SUCCESS
+```
 
 ---
 
-## Project Roadmap
+## 9. Troubleshooting & FAQ
 
-- [x] **Project Inception & Architecture Specification** (Docs: [Design Specification](docs/superpowers/specs/2026-11-08-inventory-warehouse-management-system-design.md))
-- [x] **Task 1: Maven Multi-Module Scaffolding** (`iwms-core`, `iwms-web`, Maven Wrapper, JUnit 5 SmokeTest verified)
-- [x] **Task 2: Core Domain Model, Enums & Product Hierarchy** (7 JUnit 5 tests passing: Builder, Encapsulation, Polymorphism, Immutability)
-- [x] **Task 3: Domain Strategy Interfaces & Business Logic** (6 JUnit 5 tests passing: FEFO/FIFO Pick, Low Stock/Expiry Alerts, MinMax/Velocity Reorders, Pricing)
-- [x] **Task 4: Warehouse Entities, Collections & Inventory Service** (8 JUnit 5 tests passing: Concurrency, Undo stack, LRU cache, PriorityQueue alerts, Time travel timeline, Streams analytics)
-- [x] **Task 5: File Persistence Layer (Atomic Writes, Ledger, Audit, Backup/Restore)** (6 JUnit 5 tests passing: Atomic writes, WAL ledger append & replay, audit logging, file-backed repository restart recovery, zip backup & restore, 200+ product catalog seeder)
-- [x] **Task 6: Authentication, User RBAC & Offline Sync Engine** (6 JUnit 5 tests passing: PBKDF2 hashing, account lockout, RBAC permission hierarchy, token sessions, offline idempotent sync, deficit conflict handling)
-- [x] **Task 7: OpenPDF Summary Report Generator** (3 JUnit 5 tests passing: Monochrome A4 PDF count sheet generation, RBAC employee price masking, CSV catalog export/import)
-- [x] **Task 8: Spring Boot REST API, Custom Auth Filter & HTTPS Keystore** (7 SpringBoot integration tests passing: Authentication, Token verification, Role-based cost price redaction, Inbound/Outbound REST mutations, PDF streaming. Total 44 multi-module tests passing)
-- [x] **Task 9: Frontend Architecture & Glassmorphism Design System** (`iwms-ui`: React 19 + TypeScript + Vite 6 + Tailwind CSS + Framer Motion, frosted glass styling, theme provider, floating navigation dock, responsive login page with instant demo roles)
-- [x] **Task 10: Core Frontend Screens & PWA Offline Sync Engine** (`DashboardPage` with Recharts & KPI counters, `InventoryPage` with glass table, search, filters & price masking, `WarehouseMapPage` 2D zone & bin fill grid, `StockMovementModal` with optimistic offline queueing, `idb` IndexedDB outbox & `ConflictReviewPanel`)
-- [x] **Task 11: Advanced Operational Features** (`MovementsPage` with time-travel slider querying `asof` timeline, `OrdersPage` with 1-click dock receiving, `CycleCountPage` with live variance reconciliation, `ReportsPage` with live OpenPDF preview & ZIP backup, `CommandPalette` with `Ctrl + K`)
-- [x] **Task 12: Production Packaging, End-to-End Verification & Comprehensive Documentation** (Single executable JAR packaging, static asset bundling, 44/44 tests verified green)
+#### Q: Port 8443 is already in use by another service. How can I change it?
+**A:** You can override the port at launch using standard Spring Boot arguments:
+```bash
+java -jar iwms-web/target/iwms.jar --server.port=9090
+```
+Then access at `http://localhost:9090`.
+
+#### Q: How does IWMS prevent data loss if the computer crashes or loses power?
+**A:** IWMS uses a **Write-Ahead Log (WAL)** engine (`MovementLedger`). Every movement is written to `data/ledger.log` on disk before in-memory state is altered. Additionally, `AtomicFileWriter` writes to a `.tmp` file, calls `FileOutputStream.getFD().sync()` to force the OS kernel to flush disk controller buffers, and then performs an atomic replacement via `Files.move(..., ATOMIC_MOVE)`.
+
+#### Q: Can I run this on a Raspberry Pi or low-power mini PC?
+**A:** Yes! Because IWMS requires no external database engine and runs lightweight in-memory collections, it runs smoothly on single-board computers (Raspberry Pi 4/5) with 2GB+ RAM.
 
 ---
 
 ## License
-Open-source academic college project. Free for educational and commercial use under the MIT License.
+Open-source academic college project. Free for educational, commercial, and personal use under the MIT License.

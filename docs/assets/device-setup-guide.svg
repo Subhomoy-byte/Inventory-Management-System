@@ -1,0 +1,118 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 420" width="100%" height="100%">
+  <defs>
+    <linearGradient id="guideBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b1120" />
+      <stop offset="100%" stop-color="#020617" />
+    </linearGradient>
+    <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#0284c7" />
+    </linearGradient>
+    <linearGradient id="purpleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#c084fc" />
+      <stop offset="100%" stop-color="#7e22ce" />
+    </linearGradient>
+    <linearGradient id="emeraldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34d399" />
+      <stop offset="100%" stop-color="#059669" />
+    </linearGradient>
+    <linearGradient id="amberGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24" />
+      <stop offset="100%" stop-color="#d97706" />
+    </linearGradient>
+  </defs>
+
+  <style>
+    .title { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 20px; font-weight: 800; fill: #ffffff; }
+    .subtitle { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 12px; fill: #94a3b8; }
+    .step-badge { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 13px; font-weight: 800; fill: #ffffff; }
+    .card-h { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 14px; font-weight: 700; fill: #f8fafc; }
+    .card-p { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 11px; fill: #94a3b8; }
+    .code { font-family: 'Consolas', monospace; font-size: 11px; fill: #38bdf8; }
+  </style>
+
+  <rect width="1100" height="420" rx="16" fill="url(#guideBg)" />
+
+  <g transform="translate(50, 40)">
+    <text x="0" y="0" class="title">Zero-Configuration Setup on Any Computer (Windows / Mac / Linux)</text>
+    <text x="0" y="20" class="subtitle">Get up and running in under 60 seconds with 100% self-contained standalone execution</text>
+  </g>
+
+  <g transform="translate(50, 95)">
+    <!-- Step 1: Java Check -->
+    <g transform="translate(0, 0)">
+      <rect width="230" height="270" rx="14" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5" stroke-opacity="0.4" />
+      <rect x="18" y="18" width="30" height="30" rx="8" fill="url(#blueGrad)" />
+      <text x="29" y="38" class="step-badge">1</text>
+      <text x="18" y="74" class="card-h">Check Java 17+</text>
+      <text x="18" y="94" class="card-p">Requires standard JRE/JDK.</text>
+      <text x="18" y="110" class="card-p">Zero external DB needed.</text>
+
+      <rect x="15" y="130" width="200" height="42" rx="8" fill="#0f172a" />
+      <text x="25" y="155" class="code">java -version</text>
+
+      <g transform="translate(18, 190)">
+        <text x="0" y="15" class="card-p" fill="#38bdf8">&check; Works on Java 17, 21, 26</text>
+        <text x="0" y="35" class="card-p" fill="#38bdf8">&check; 100% Free OpenJDK</text>
+        <text x="0" y="55" class="card-p" fill="#38bdf8">&check; No Docker / SQL</text>
+      </g>
+    </g>
+
+    <!-- Step 2: Clone or Copy -->
+    <g transform="translate(255, 0)">
+      <rect width="230" height="270" rx="14" fill="#1e293b" stroke="#c084fc" stroke-width="1.5" stroke-opacity="0.4" />
+      <rect x="18" y="18" width="30" height="30" rx="8" fill="url(#purpleGrad)" />
+      <text x="28" y="38" class="step-badge">2</text>
+      <text x="18" y="74" class="card-h">Get Repository</text>
+      <text x="18" y="94" class="card-p">Clone the GitHub project</text>
+      <text x="18" y="110" class="card-p">or copy the project folder.</text>
+
+      <rect x="15" y="130" width="200" height="42" rx="8" fill="#0f172a" />
+      <text x="25" y="155" class="code" font-size="9.5px">git clone &lt;repo-url&gt;</text>
+
+      <g transform="translate(18, 190)">
+        <text x="0" y="15" class="card-p" fill="#c084fc">&check; Includes pre-built assets</text>
+        <text x="0" y="35" class="card-p" fill="#c084fc">&check; Includes Maven wrapper</text>
+        <text x="0" y="55" class="card-p" fill="#c084fc">&check; Zero Node.js required</text>
+      </g>
+    </g>
+
+    <!-- Step 3: Run Standalone JAR -->
+    <g transform="translate(510, 0)">
+      <rect width="230" height="270" rx="14" fill="#1e293b" stroke="#34d399" stroke-width="1.5" stroke-opacity="0.4" />
+      <rect x="18" y="18" width="30" height="30" rx="8" fill="url(#emeraldGrad)" />
+      <text x="28" y="38" class="step-badge">3</text>
+      <text x="18" y="74" class="card-h">Launch Server</text>
+      <text x="18" y="94" class="card-p">Run single executable JAR.</text>
+      <text x="18" y="110" class="card-p">Bootstraps in ~5 seconds.</text>
+
+      <rect x="15" y="130" width="200" height="42" rx="8" fill="#0f172a" />
+      <text x="22" y="155" class="code" font-size="10px">java -jar iwms.jar</text>
+
+      <g transform="translate(18, 190)">
+        <text x="0" y="15" class="card-p" fill="#34d399">&check; Embedded Tomcat 10</text>
+        <text x="0" y="35" class="card-p" fill="#34d399">&check; Seeds 200+ products</text>
+        <text x="0" y="55" class="card-p" fill="#34d399">&check; Starts HTTP on port 8443</text>
+      </g>
+    </g>
+
+    <!-- Step 4: Access Everywhere -->
+    <g transform="translate(765, 0)">
+      <rect width="235" height="270" rx="14" fill="#1e293b" stroke="#fbbf24" stroke-width="1.5" stroke-opacity="0.4" />
+      <rect x="18" y="18" width="30" height="30" rx="8" fill="url(#amberGrad)" />
+      <text x="28" y="38" class="step-badge">4</text>
+      <text x="18" y="74" class="card-h">Open in Browser</text>
+      <text x="18" y="94" class="card-p">Access on PC or over LAN</text>
+      <text x="18" y="110" class="card-p">from mobile phones &amp; tablets.</text>
+
+      <rect x="15" y="130" width="205" height="42" rx="8" fill="#0f172a" />
+      <text x="20" y="155" class="code" font-size="10px">http://localhost:8443</text>
+
+      <g transform="translate(18, 190)">
+        <text x="0" y="15" class="card-p" fill="#fbbf24">&check; Admin: admin / admin123</text>
+        <text x="0" y="35" class="card-p" fill="#fbbf24">&check; Manager: manager / manager123</text>
+        <text x="0" y="55" class="card-p" fill="#fbbf24">&check; Mobile: http://&lt;IP&gt;:8443</text>
+      </g>
+    </g>
+  </g>
+</svg>
