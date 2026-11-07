@@ -1,0 +1,77 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg-gradient: radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.12) 0px, transparent 50%),
+                    radial-gradient(at 100% 0%, rgba(168, 85, 247, 0.12) 0px, transparent 50%),
+                    radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.10) 0px, transparent 50%),
+                    radial-gradient(at 0% 100%, rgba(59, 130, 246, 0.10) 0px, transparent 50%);
+  }
+
+  .dark {
+    --bg-gradient: radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.18) 0px, transparent 50%),
+                    radial-gradient(at 100% 0%, rgba(168, 85, 247, 0.18) 0px, transparent 50%),
+                    radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.12) 0px, transparent 50%),
+                    radial-gradient(at 0% 100%, rgba(59, 130, 246, 0.15) 0px, transparent 50%);
+  }
+
+  body {
+    @apply m-0 p-0 font-sans antialiased text-slate-800 dark:text-slate-100 bg-slate-50 dark:bg-slate-950 transition-colors duration-300 min-h-screen selection:bg-indigo-500 selection:text-white;
+    background-image: var(--bg-gradient);
+    background-attachment: fixed;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-white/70 dark:bg-slate-900/60 backdrop-blur-xl border border-white/40 dark:border-white/10 shadow-lg shadow-black/5 dark:shadow-black/20 rounded-2xl transition-all duration-200;
+  }
+
+  .glass-card-hover {
+    @apply hover:border-indigo-400/50 dark:hover:border-indigo-500/40 hover:shadow-xl hover:shadow-indigo-500/10 hover:-translate-y-0.5;
+  }
+
+  .glass-panel {
+    @apply bg-white/60 dark:bg-slate-900/50 backdrop-blur-2xl border border-white/50 dark:border-white/10 shadow-2xl rounded-3xl;
+  }
+
+  .glass-input {
+    @apply w-full px-4 py-2.5 rounded-xl bg-white/50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-700/80 text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all backdrop-blur-md;
+  }
+
+  .glass-button-primary {
+    @apply px-4 py-2.5 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-medium shadow-md shadow-indigo-500/25 hover:shadow-lg hover:shadow-indigo-500/40 hover:from-indigo-600 hover:to-purple-700 active:scale-95 transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2;
+  }
+
+  .glass-button-secondary {
+    @apply px-4 py-2.5 rounded-xl bg-white/60 dark:bg-slate-800/60 hover:bg-white/80 dark:hover:bg-slate-700/70 text-slate-700 dark:text-slate-200 border border-slate-200/60 dark:border-slate-700/60 font-medium shadow-sm hover:shadow active:scale-95 transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 backdrop-blur-md;
+  }
+
+  .glass-dock {
+    @apply bg-white/70 dark:bg-slate-900/70 backdrop-blur-2xl border border-white/40 dark:border-white/10 shadow-2xl rounded-full px-3 py-2 flex items-center gap-1.5 transition-all duration-300;
+  }
+
+  .badge-glow {
+    @apply relative inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold tracking-wide border;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-300/60 dark:bg-slate-700/60 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-slate-400 dark:bg-slate-600;
+}

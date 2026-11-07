@@ -42,6 +42,9 @@ A full-stack, offline-capable inventory and warehouse management system designed
 | **Role-Aware DTO Projections** | [`ProductDto`](iwms-web/src/main/java/com/iwms/api/dto/ProductDto.java) | Dynamic field-level projection stripping sensitive `costPrice` and margin data for `EMPLOYEE` role clients |
 | **Domain Bean Configuration** | [`DomainBeanConfig`](iwms-web/src/main/java/com/iwms/api/config/DomainBeanConfig.java) | Spring wiring for pure Java core domain classes, enforcing zero Spring framework leakage in domain libraries |
 | **Custom Exceptions** | [`com.iwms.exception.*`](iwms-core/src/main/java/com/iwms/exception/) | Checked exceptions ([`InsufficientStockException`](iwms-core/src/main/java/com/iwms/exception/InsufficientStockException.java), [`DuplicateSkuException`](iwms-core/src/main/java/com/iwms/exception/DuplicateSkuException.java), [`StorageException`](iwms-core/src/main/java/com/iwms/exception/StorageException.java), [`SyncConflictException`](iwms-core/src/main/java/com/iwms/exception/SyncConflictException.java)) and unchecked exceptions ([`UnauthorizedException`](iwms-core/src/main/java/com/iwms/exception/UnauthorizedException.java), [`ForbiddenException`](iwms-core/src/main/java/com/iwms/exception/ForbiddenException.java)) |
+| **Glassmorphism UI Shell** | [`App.tsx`](iwms-ui/src/App.tsx), [`index.css`](iwms-ui/src/index.css) | Frosted glass containers (`backdrop-blur-xl`), animated gradient mesh, responsive layout, dark/light theme |
+| **Floating Glass Dock** | [`Dock.tsx`](iwms-ui/src/components/layout/Dock.tsx) | macOS-inspired floating navigation dock with tooltips, active tab scaling, and pending sync count badges |
+| **Client-Side RBAC & Quick Login** | [`LoginPage.tsx`](iwms-ui/src/pages/LoginPage.tsx), [`AuthContext.tsx`](iwms-ui/src/context/AuthContext.tsx) | Responsive login screen with 1-click Admin, Manager, and Employee credential fillers, secure token storage |
 
 ---
 
@@ -56,11 +59,12 @@ A full-stack, offline-capable inventory and warehouse management system designed
 - [x] **Task 6: Authentication, User RBAC & Offline Sync Engine** (6 JUnit 5 tests passing: PBKDF2 hashing, account lockout, RBAC permission hierarchy, token sessions, offline idempotent sync, deficit conflict handling)
 - [x] **Task 7: OpenPDF Summary Report Generator** (3 JUnit 5 tests passing: Monochrome A4 PDF count sheet generation, RBAC employee price masking, CSV catalog export/import)
 - [x] **Task 8: Spring Boot REST API, Custom Auth Filter & HTTPS Keystore** (7 SpringBoot integration tests passing: Authentication, Token verification, Role-based cost price redaction, Inbound/Outbound REST mutations, PDF streaming. Total 44 multi-module tests passing)
+- [x] **Task 9: Frontend Architecture & Glassmorphism Design System** (`iwms-ui`: React 19 + TypeScript + Vite 6 + Tailwind CSS + Framer Motion, frosted glass styling, theme provider, floating navigation dock, responsive login page with instant demo roles)
 - [x] **Phase 1: Java Core Domain & JUnit 5 Tests**
 - [x] **Phase 2: File Persistence Layer (Ledger, Audit, Backup)**
 - [x] **Phase 3: Authentication, Session & REST API**
 - [x] **Phase 4: OpenPDF Summary Report Generator**
-- [ ] **Phase 5: Frontend Shell & Glassmorphism Design System**
+- [x] **Phase 5: Frontend Shell & Glassmorphism Design System**
 - [ ] **Phase 6: Core Frontend Screens & PWA Offline Engine**
 - [ ] **Phase 7: Advanced Business Logic (Time Travel, FEFO, Reorders)**
 - [ ] **Phase 8: Motion, Refinement & Performance Pass**
