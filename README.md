@@ -25,6 +25,12 @@ A full-stack, offline-capable inventory and warehouse management system designed
 | **Java Collections** | [`InventoryService`](iwms-core/src/main/java/com/iwms/service/InventoryService.java) | `HashMap` for O(1) catalog/bins; `TreeMap` for time-travel ledger (`headMap`); `ArrayDeque` for LIFO undo stack; `PriorityQueue` for alert urgency; `LinkedHashMap` for LRU recently-viewed cache |
 | **Concurrency** | [`InventoryService`](iwms-core/src/main/java/com/iwms/service/InventoryService.java) | `ReentrantReadWriteLock` with separate readLock for concurrent readers and writeLock for atomic stock transitions |
 | **Streams & Lambdas** | [`InventoryService`](iwms-core/src/main/java/com/iwms/service/InventoryService.java) | `Collectors.groupingBy`, `summingDouble`, `summingInt`, `flatMap`, custom comparator sorting for top movers and valuations |
+| **Repository Pattern** | [`Repository`](iwms-core/src/main/java/com/iwms/repository/Repository.java), [`InMemoryRepository`](iwms-core/src/main/java/com/iwms/repository/InMemoryRepository.java), [`FileBackedRepository`](iwms-core/src/main/java/com/iwms/repository/FileBackedRepository.java) | Generic repository abstraction with in-memory concurrent caching and atomic JSON file persistence with polymorphic deserialization |
+| **Atomic File Persistence** | [`AtomicFileWriter`](iwms-core/src/main/java/com/iwms/storage/AtomicFileWriter.java) | Prevents corruption via `.tmp` staging, OS disk cache sync (`getFD().sync()`), and atomic rename (`ATOMIC_MOVE`) |
+| **Write-Ahead Log (WAL)** | [`MovementLedger`](iwms-core/src/main/java/com/iwms/storage/MovementLedger.java) | Append-only sequential TSV log for immutable stock movements and crash-recovery state replay |
+| **Audit Logging** | [`AuditLogger`](iwms-core/src/main/java/com/iwms/storage/AuditLogger.java) | Append-only security and operational audit trail tracking actor, action, target, outcome, and metadata |
+| **Backup & Recovery** | [`BackupManager`](iwms-core/src/main/java/com/iwms/storage/BackupManager.java) | Automated and on-demand compressed ZIP backups of `data/`, zip-slip prevention, and JVM shutdown hook |
+| **Data Seeder** | [`DataSeeder`](iwms-core/src/main/java/com/iwms/storage/DataSeeder.java) | Idempotent bootstrap seeding of warehouse topology (Warehouse -> Zones -> Bins) and >200 realistic products with initial stock |
 | **Custom Exceptions** | [`com.iwms.exception.*`](iwms-core/src/main/java/com/iwms/exception/) | Checked exceptions ([`InsufficientStockException`](iwms-core/src/main/java/com/iwms/exception/InsufficientStockException.java), [`DuplicateSkuException`](iwms-core/src/main/java/com/iwms/exception/DuplicateSkuException.java), [`StorageException`](iwms-core/src/main/java/com/iwms/exception/StorageException.java), [`SyncConflictException`](iwms-core/src/main/java/com/iwms/exception/SyncConflictException.java)) and unchecked exceptions ([`UnauthorizedException`](iwms-core/src/main/java/com/iwms/exception/UnauthorizedException.java), [`ForbiddenException`](iwms-core/src/main/java/com/iwms/exception/ForbiddenException.java)) |
 
 ---
@@ -35,9 +41,10 @@ A full-stack, offline-capable inventory and warehouse management system designed
 - [x] **Task 1: Maven Multi-Module Scaffolding** (`iwms-core`, `iwms-web`, Maven Wrapper, JUnit 5 SmokeTest verified)
 - [x] **Task 2: Core Domain Model, Enums & Product Hierarchy** (7 JUnit 5 tests passing: Builder, Encapsulation, Polymorphism, Immutability)
 - [x] **Task 3: Domain Strategy Interfaces & Business Logic** (6 JUnit 5 tests passing: FEFO/FIFO Pick, Low Stock/Expiry Alerts, MinMax/Velocity Reorders, Pricing)
-- [x] **Task 4: Warehouse Entities, Collections & Inventory Service** (8 JUnit 5 tests passing: Concurrency, Undo stack, LRU cache, PriorityQueue alerts, Time travel timeline, Streams analytics. Total 22 core tests passing)
-- [/] **Phase 1: Java Core Domain & JUnit 5 Tests**
-- [ ] **Phase 2: File Persistence Layer (Ledger, Audit, Backup)**
+- [x] **Task 4: Warehouse Entities, Collections & Inventory Service** (8 JUnit 5 tests passing: Concurrency, Undo stack, LRU cache, PriorityQueue alerts, Time travel timeline, Streams analytics)
+- [x] **Task 5: File Persistence Layer (Atomic Writes, Ledger, Audit, Backup/Restore)** (6 JUnit 5 tests passing: Atomic writes, WAL ledger append & replay, audit logging, file-backed repository restart recovery, zip backup & restore, 200+ product catalog seeder. Total 28 core tests passing)
+- [x] **Phase 1: Java Core Domain & JUnit 5 Tests**
+- [x] **Phase 2: File Persistence Layer (Ledger, Audit, Backup)**
 - [ ] **Phase 3: Authentication, Session & REST API**
 - [ ] **Phase 4: OpenPDF Summary Report Generator**
 - [ ] **Phase 5: Frontend Shell & Glassmorphism Design System**
