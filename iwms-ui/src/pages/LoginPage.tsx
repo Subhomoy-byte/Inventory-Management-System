@@ -126,18 +126,18 @@ export const LoginPage: React.FC = () => {
             <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-indigo-600 to-purple-600 flex items-center justify-center text-white shadow-xl shadow-indigo-500/30 mb-4 ring-4 ring-white/20 dark:ring-white/10">
               <Boxes className="w-8 h-8" />
             </div>
-            <h1 className="text-2xl font-bold tracking-tight bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent">
+            <h1 className="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent">
               IWMS Pro
             </h1>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-xs">
+            <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 max-w-xs font-medium">
               Inventory & Warehouse Management System
             </p>
           </div>
 
           {/* Error Message */}
           {error && (
-            <div className="mb-6 p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 text-xs flex items-center gap-2">
-              <AlertCircle className="w-4 h-4 shrink-0" />
+            <div className="mb-6 p-4 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 text-sm font-semibold flex items-center gap-2.5">
+              <AlertCircle className="w-5 h-5 shrink-0" />
               <span>{error}</span>
             </div>
           )}
@@ -145,34 +145,34 @@ export const LoginPage: React.FC = () => {
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1.5">
+              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1.5">
                 Username
               </label>
               <div className="relative">
-                <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                 <input
                   type="text"
                   required
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  className="glass-input pl-10"
+                  className="glass-input pl-11 text-base"
                   placeholder="admin / manager / employee"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1.5">
+              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1.5">
                 Password
               </label>
               <div className="relative">
-                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                 <input
                   type="password"
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="glass-input pl-10"
+                  className="glass-input pl-11 text-base"
                   placeholder="••••••••"
                 />
               </div>
@@ -181,14 +181,14 @@ export const LoginPage: React.FC = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full glass-button-primary mt-2"
+              className="w-full glass-button-primary mt-3 py-3 text-base font-bold"
             >
               {loading ? (
-                <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                <span className="inline-block w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
               ) : (
                 <>
                   <span>Sign In</span>
-                  <ArrowRight className="w-4 h-4" />
+                  <ArrowRight className="w-5 h-5" />
                 </>
               )}
             </button>
@@ -196,37 +196,37 @@ export const LoginPage: React.FC = () => {
 
           {/* Quick Demo Credentials */}
           <div className="mt-8 pt-6 border-t border-slate-200/50 dark:border-slate-800/80">
-            <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 font-medium mb-3">
-              <ShieldCheck className="w-3.5 h-3.5 text-indigo-500" />
-              <span>Quick Demo Roles (Click to fill):</span>
+            <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400 font-semibold mb-3">
+              <ShieldCheck className="w-4 h-4 text-indigo-500" />
+              <span>Quick Test Roles (Click to auto-fill):</span>
             </div>
 
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-3 gap-2.5">
               <button
                 type="button"
                 onClick={() => handleQuickDemo('admin', 'admin123')}
-                className="px-2.5 py-2 rounded-xl text-xs font-medium bg-rose-500/10 hover:bg-rose-500/20 text-rose-700 dark:text-rose-400 border border-rose-500/20 transition-all text-center flex flex-col items-center"
+                className="px-3 py-2.5 rounded-2xl text-sm font-semibold bg-rose-500/10 hover:bg-rose-500/20 text-rose-700 dark:text-rose-400 border border-rose-500/20 transition-all text-center flex flex-col items-center"
               >
-                <span className="font-bold">Admin</span>
-                <span className="text-[10px] opacity-75">Full Access</span>
+                <span className="font-bold">Administrator</span>
+                <span className="text-xs opacity-75 mt-0.5">Full Access</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => handleQuickDemo('manager', 'manager123')}
-                className="px-2.5 py-2 rounded-xl text-xs font-medium bg-blue-500/10 hover:bg-blue-500/20 text-blue-700 dark:text-blue-400 border border-blue-500/20 transition-all text-center flex flex-col items-center"
+                className="px-3 py-2.5 rounded-2xl text-sm font-semibold bg-blue-500/10 hover:bg-blue-500/20 text-blue-700 dark:text-blue-400 border border-blue-500/20 transition-all text-center flex flex-col items-center"
               >
                 <span className="font-bold">Manager</span>
-                <span className="text-[10px] opacity-75">Inventory Ops</span>
+                <span className="text-xs opacity-75 mt-0.5">Warehouse Ops</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => handleQuickDemo('employee', 'emp123')}
-                className="px-2.5 py-2 rounded-xl text-xs font-medium bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20 transition-all text-center flex flex-col items-center"
+                className="px-3 py-2.5 rounded-2xl text-sm font-semibold bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20 transition-all text-center flex flex-col items-center"
               >
-                <span className="font-bold">Employee</span>
-                <span className="text-[10px] opacity-75">Masked Prices</span>
+                <span className="font-bold">Staff Member</span>
+                <span className="text-xs opacity-75 mt-0.5">Standard View</span>
               </button>
             </div>
           </div>

@@ -100,52 +100,52 @@ export const InventoryPage: React.FC<InventoryPageProps> = ({ onOpenMovementModa
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Top Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
-            Inventory Catalog
+          <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+            Inventory & Product Catalog
           </h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-            Real-time stock levels, multi-category taxonomy, and role-enforced price masking.
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+            Real-time stock counts, shelf storage locations, and role-based price transparency.
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           <button
             onClick={handleExportCsv}
-            className="glass-button-secondary text-xs py-2 px-3"
-            title="Export CSV"
+            className="glass-button-secondary text-sm py-2.5 px-4"
+            title="Download Spreadsheet"
           >
-            <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-500" />
-            <span>Export CSV</span>
+            <FileSpreadsheet className="w-4 h-4 text-emerald-500" />
+            <span>Export Spreadsheet</span>
           </button>
           <button
             onClick={() => onOpenMovementModal('IN')}
-            className="glass-button-primary text-xs py-2 px-3"
+            className="glass-button-primary text-sm py-2.5 px-4"
           >
-            <ArrowDownRight className="w-3.5 h-3.5" />
-            <span>New Movement</span>
+            <ArrowDownRight className="w-4 h-4" />
+            <span>New Stock Movement</span>
           </button>
         </div>
       </div>
 
       {/* Filter and Search Bar */}
-      <GlassCard className="p-4">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+      <GlassCard className="p-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Search Box */}
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
             <input
               type="text"
-              placeholder="Search by SKU, product name..."
+              placeholder="Search by product code, name, shelf..."
               value={search}
               onChange={(e) => {
                 setSearch(e.target.value);
                 setCurrentPage(1);
               }}
-              className="glass-input pl-9 text-xs"
+              className="glass-input pl-10 text-sm"
             />
           </div>
 
@@ -157,7 +157,7 @@ export const InventoryPage: React.FC<InventoryPageProps> = ({ onOpenMovementModa
                 setCategoryFilter(e.target.value);
                 setCurrentPage(1);
               }}
-              className="glass-input text-xs"
+              className="glass-input text-sm"
             >
               <option value="ALL" className="bg-slate-900 text-white">All Categories</option>
               {categories.map((c) => (
@@ -176,12 +176,12 @@ export const InventoryPage: React.FC<InventoryPageProps> = ({ onOpenMovementModa
                 setStatusFilter(e.target.value);
                 setCurrentPage(1);
               }}
-              className="glass-input text-xs"
+              className="glass-input text-sm"
             >
               <option value="ALL" className="bg-slate-900 text-white">All Stock Statuses</option>
-              <option value="OPTIMAL" className="bg-slate-900 text-white">Optimal</option>
-              <option value="LOW_STOCK" className="bg-slate-900 text-white">Low Stock</option>
-              <option value="CRITICAL" className="bg-slate-900 text-white">Critical</option>
+              <option value="OPTIMAL" className="bg-slate-900 text-white">Optimal Level</option>
+              <option value="LOW_STOCK" className="bg-slate-900 text-white">Low Stock Warning</option>
+              <option value="CRITICAL" className="bg-slate-900 text-white">Critical Shortage</option>
               <option value="OVERSTOCKED" className="bg-slate-900 text-white">Overstocked</option>
             </select>
           </div>
@@ -194,14 +194,14 @@ export const InventoryPage: React.FC<InventoryPageProps> = ({ onOpenMovementModa
                 setTypeFilter(e.target.value);
                 setCurrentPage(1);
               }}
-              className="glass-input text-xs"
+              className="glass-input text-sm"
             >
               <option value="ALL" className="bg-slate-900 text-white">All Product Types</option>
-              <option value="PERISHABLE" className="bg-slate-900 text-white">Perishable</option>
-              <option value="ELECTRONIC" className="bg-slate-900 text-white">Electronic</option>
-              <option value="FRAGILE" className="bg-slate-900 text-white">Fragile</option>
-              <option value="BULK" className="bg-slate-900 text-white">Bulk</option>
-              <option value="STANDARD" className="bg-slate-900 text-white">Standard</option>
+              <option value="PERISHABLE" className="bg-slate-900 text-white">Perishable Goods</option>
+              <option value="ELECTRONIC" className="bg-slate-900 text-white">Electronic Items</option>
+              <option value="FRAGILE" className="bg-slate-900 text-white">Fragile Items</option>
+              <option value="BULK" className="bg-slate-900 text-white">Bulk Material</option>
+              <option value="STANDARD" className="bg-slate-900 text-white">Standard Items</option>
             </select>
           </div>
         </div>
@@ -210,26 +210,26 @@ export const InventoryPage: React.FC<InventoryPageProps> = ({ onOpenMovementModa
       {/* Products Glass Table */}
       <GlassCard className="p-0 overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
+          <table className="w-full text-left text-sm">
             <thead>
-              <tr className="border-b border-slate-200/60 dark:border-slate-800 text-slate-400 font-semibold uppercase tracking-wider bg-slate-500/5">
-                <th className="py-3 px-4">SKU / Product</th>
-                <th className="py-3 px-4">Category & Type</th>
-                <th className="py-3 px-4">On Hand / Reorder</th>
-                <th className="py-3 px-4">Bin Location</th>
-                <th className="py-3 px-4">
-                  {isAdmin || isManager ? 'Cost / Sell Price' : 'Sell Price'}
+              <tr className="border-b border-slate-200/60 dark:border-slate-800 text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider bg-slate-500/5 text-xs">
+                <th className="py-4 px-5">Product Code & Name</th>
+                <th className="py-4 px-5">Category & Classification</th>
+                <th className="py-4 px-5">Available Stock & Reorder</th>
+                <th className="py-4 px-5">Storage Shelf</th>
+                <th className="py-4 px-5">
+                  {isAdmin || isManager ? 'Unit Cost / Selling Price' : 'Selling Price'}
                 </th>
-                <th className="py-3 px-4">Status</th>
-                <th className="py-3 px-4 text-right">Actions</th>
+                <th className="py-4 px-5">Status</th>
+                <th className="py-4 px-5 text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-200/40 dark:divide-slate-800/60">
               {paginatedProducts.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="py-12 text-center text-slate-400">
-                    <Boxes className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                    <span>No products found matching the active filters.</span>
+                  <td colSpan={7} className="py-16 text-center text-slate-400">
+                    <Boxes className="w-10 h-10 mx-auto mb-3 opacity-40 text-slate-400" />
+                    <span className="text-base font-medium">No products found matching the active filters.</span>
                   </td>
                 </tr>
               ) : (
@@ -241,35 +241,35 @@ export const InventoryPage: React.FC<InventoryPageProps> = ({ onOpenMovementModa
                       key={p.id}
                       className="hover:bg-white/40 dark:hover:bg-slate-800/40 transition-colors"
                     >
-                      {/* SKU / Name */}
-                      <td className="py-3.5 px-4">
-                        <div className="font-bold text-slate-900 dark:text-white">
+                      {/* Item Code & Name */}
+                      <td className="py-4 px-5">
+                        <div className="font-bold text-base text-slate-900 dark:text-white">
                           {p.name}
                         </div>
-                        <div className="text-[11px] font-mono text-indigo-600 dark:text-indigo-400">
-                          {p.sku}
+                        <div className="text-xs font-mono font-semibold text-indigo-600 dark:text-indigo-400 mt-0.5">
+                          Code: {p.sku}
                         </div>
                       </td>
 
-                      {/* Category & Type */}
-                      <td className="py-3.5 px-4">
-                        <div className="font-medium text-slate-700 dark:text-slate-300">
+                      {/* Category & Classification */}
+                      <td className="py-4 px-5">
+                        <div className="font-semibold text-slate-800 dark:text-slate-200">
                           {p.category}
                         </div>
-                        <span className="inline-block text-[10px] px-1.5 py-0.2 rounded bg-slate-200/60 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 font-mono mt-0.5">
+                        <span className="inline-block text-xs px-2 py-0.5 rounded bg-slate-200/70 dark:bg-slate-800/70 text-slate-600 dark:text-slate-400 font-medium mt-1">
                           {p.productType}
                         </span>
                       </td>
 
                       {/* Quantity & Level Bar */}
-                      <td className="py-3.5 px-4">
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className="font-mono font-bold text-slate-900 dark:text-white">
-                            {p.quantity}
+                      <td className="py-4 px-5">
+                        <div className="flex items-center gap-2 mb-1.5">
+                          <span className="font-mono font-extrabold text-base text-slate-900 dark:text-white">
+                            {p.quantity} units
                           </span>
-                          <span className="text-slate-400 text-[10px]">/ min {p.reorderPoint}</span>
+                          <span className="text-slate-400 text-xs font-medium">/ minimum {p.reorderPoint}</span>
                         </div>
-                        <div className="w-24 h-1.5 rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden">
+                        <div className="w-28 h-2 rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden">
                           <div
                             className={`h-full rounded-full ${
                               p.quantity <= p.reorderPoint
@@ -283,58 +283,58 @@ export const InventoryPage: React.FC<InventoryPageProps> = ({ onOpenMovementModa
                         </div>
                       </td>
 
-                      {/* Bin Location */}
-                      <td className="py-3.5 px-4 font-mono font-semibold text-slate-600 dark:text-slate-300">
+                      {/* Shelf Location */}
+                      <td className="py-4 px-5 font-mono font-bold text-slate-800 dark:text-slate-200 text-sm">
                         {p.binLocation}
                       </td>
 
-                      {/* Price / RBAC Masking */}
-                      <td className="py-3.5 px-4 font-mono">
+                      {/* Price / Role-Based Masking */}
+                      <td className="py-4 px-5 font-mono">
                         <div>
-                          <span className="font-bold text-slate-900 dark:text-white">
+                          <span className="font-extrabold text-base text-slate-900 dark:text-white">
                             ${p.sellingPrice.toFixed(2)}
                           </span>
                         </div>
                         {isAdmin || isManager ? (
-                          <div className="text-[10px] text-slate-500 dark:text-slate-400">
+                          <div className="text-xs text-slate-500 dark:text-slate-400 font-medium mt-0.5">
                             Cost: ${p.costPrice !== undefined ? p.costPrice.toFixed(2) : 'N/A'}
                           </div>
                         ) : (
-                          <div className="text-[10px] text-slate-400 flex items-center gap-1">
-                            <Lock className="w-2.5 h-2.5" />
+                          <div className="text-xs text-slate-400 flex items-center gap-1 font-medium mt-0.5">
+                            <Lock className="w-3 h-3" />
                             <span>Cost Masked</span>
                           </div>
                         )}
                       </td>
 
                       {/* Status */}
-                      <td className="py-3.5 px-4">
+                      <td className="py-4 px-5">
                         <StatusChip status={p.status} />
                       </td>
 
                       {/* Actions */}
-                      <td className="py-3.5 px-4 text-right">
-                        <div className="flex items-center justify-end gap-1">
+                      <td className="py-4 px-5 text-right">
+                        <div className="flex items-center justify-end gap-1.5">
                           <button
                             onClick={() => onOpenMovementModal('IN', p)}
-                            className="p-1.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 transition-all"
-                            title="Stock In"
+                            className="p-2 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 transition-all"
+                            title="Receive Stock"
                           >
-                            <ArrowDownRight className="w-3.5 h-3.5" />
+                            <ArrowDownRight className="w-4 h-4" />
                           </button>
                           <button
                             onClick={() => onOpenMovementModal('OUT', p)}
-                            className="p-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-400 transition-all"
-                            title="Stock Out"
+                            className="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-400 transition-all"
+                            title="Dispatch Stock"
                           >
-                            <ArrowUpRight className="w-3.5 h-3.5" />
+                            <ArrowUpRight className="w-4 h-4" />
                           </button>
                           <button
                             onClick={() => onOpenMovementModal('TRANSFER', p)}
-                            className="p-1.5 rounded-lg bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 transition-all"
-                            title="Transfer Bin"
+                            className="p-2 rounded-xl bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 transition-all"
+                            title="Transfer Shelf"
                           >
-                            <ArrowLeftRight className="w-3.5 h-3.5" />
+                            <ArrowLeftRight className="w-4 h-4" />
                           </button>
                         </div>
                       </td>

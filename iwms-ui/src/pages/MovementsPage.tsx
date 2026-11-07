@@ -88,37 +88,37 @@ export const MovementsPage: React.FC = () => {
   const timeTravelDate = new Date(Date.now() - timeTravelMinutesAgo * 60 * 1000);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white flex items-center gap-2">
-            <History className="w-6 h-6 text-indigo-500" />
-            <span>Movement Ledger & Time-Travel</span>
+          <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white flex items-center gap-3">
+            <History className="w-8 h-8 text-indigo-500" />
+            <span>Inventory Transaction History & Time Travel</span>
           </h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-            Immutable append-only WAL transaction ledger with LIFO undo and TreeMap historical reconstruction.
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+            Complete transaction ledger with 1-click transaction undo and historical state replay.
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           <button
             onClick={handleUndo}
             disabled={undoLoading || movements.length === 0}
-            className="glass-button-secondary text-xs py-2 px-3 hover:text-amber-600 disabled:opacity-50"
-            title="Pops the ArrayDeque LIFO undo stack in Java InventoryService"
+            className="glass-button-secondary text-sm py-2.5 px-4 hover:text-amber-600 disabled:opacity-50"
+            title="Reverses the most recent inventory transaction"
           >
-            <RotateCcw className={`w-3.5 h-3.5 ${undoLoading ? 'animate-spin' : ''}`} />
-            <span>Undo Last Movement</span>
+            <RotateCcw className={`w-4 h-4 ${undoLoading ? 'animate-spin' : ''}`} />
+            <span>Undo Last Transaction</span>
           </button>
         </div>
       </div>
 
       {/* Undo Alert Notification */}
       {undoResult && (
-        <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-700 dark:text-amber-400 text-xs flex items-center justify-between">
+        <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-700 dark:text-amber-400 text-sm font-semibold flex items-center justify-between">
           <span>{undoResult}</span>
-          <button onClick={() => setUndoResult(null)} className="text-xs font-semibold hover:underline">
+          <button onClick={() => setUndoResult(null)} className="text-sm font-bold hover:underline">
             Dismiss
           </button>
         </div>
@@ -209,14 +209,14 @@ export const MovementsPage: React.FC = () => {
                   return (
                     <div
                       key={p.id}
-                      className="p-2 rounded-xl bg-white/50 dark:bg-slate-800/50 border border-slate-200/60 dark:border-slate-700/60 text-xs"
+                      className="p-2.5 rounded-xl bg-white/50 dark:bg-slate-800/50 border border-slate-200/60 dark:border-slate-700/60 text-sm"
                     >
-                      <div className="font-mono text-[10px] text-indigo-500 truncate">{p.sku}</div>
+                      <div className="font-mono text-xs font-semibold text-indigo-500 truncate">{p.sku}</div>
                       <div className="font-bold text-slate-900 dark:text-white truncate">{p.name}</div>
-                      <div className="mt-1 flex items-center justify-between text-[11px] font-mono">
+                      <div className="mt-1 flex items-center justify-between text-xs font-mono">
                         <span className="font-bold">{historicQty} units</span>
                         {delta !== 0 && (
-                          <span className={delta > 0 ? 'text-emerald-500' : 'text-rose-500'}>
+                          <span className={delta > 0 ? 'text-emerald-500 font-bold' : 'text-rose-500 font-bold'}>
                             {delta > 0 ? `+${delta}` : delta}
                           </span>
                         )}
@@ -231,83 +231,89 @@ export const MovementsPage: React.FC = () => {
       </GlassCard>
 
       {/* Movement Ledger Table */}
-      <GlassCard>
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+      <GlassCard className="p-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5">
           <div>
-            <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
-              <History className="w-4 h-4 text-purple-500" />
-              <span>Sequential Transaction History</span>
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <History className="w-5 h-5 text-purple-500" />
+              <span>Verified Transaction Log</span>
             </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
-              Total {movements.length} logged mutations in local Write-Ahead Log
+            <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
+              Total {movements.length} recorded inventory mutations in local transaction ledger
             </p>
           </div>
 
           {/* Filter Pills */}
-          <div className="flex items-center gap-1.5 p-1 rounded-xl bg-slate-200/50 dark:bg-slate-800/50 text-xs font-medium">
-            {['ALL', 'IN', 'OUT', 'TRANSFER', 'ADJUST'].map((t) => (
+          <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-slate-200/50 dark:bg-slate-800/50 text-sm font-semibold">
+            {[
+              { id: 'ALL', label: 'All Transactions' },
+              { id: 'IN', label: 'Stock In' },
+              { id: 'OUT', label: 'Stock Out' },
+              { id: 'TRANSFER', label: 'Shelf Transfer' },
+              { id: 'ADJUST', label: 'Cycle Adjustment' },
+            ].map((t) => (
               <button
-                key={t}
-                onClick={() => setSelectedType(t)}
-                className={`px-2.5 py-1 rounded-lg transition-all ${
-                  selectedType === t
-                    ? 'bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 shadow-sm font-semibold'
+                key={t.id}
+                onClick={() => setSelectedType(t.id)}
+                className={`px-3 py-1.5 rounded-xl transition-all ${
+                  selectedType === t.id
+                    ? 'bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 shadow-sm font-bold'
                     : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
                 }`}
               >
-                {t}
+                {t.label}
               </button>
             ))}
           </div>
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
+          <table className="w-full text-left text-sm">
             <thead>
-              <tr className="border-b border-slate-200/60 dark:border-slate-800 text-slate-400 font-semibold uppercase tracking-wider bg-slate-500/5">
-                <th className="py-2.5 px-3">Movement ID</th>
-                <th className="py-2.5 px-3">Type</th>
-                <th className="py-2.5 px-3">Product ID / SKU</th>
-                <th className="py-2.5 px-3">Quantity</th>
-                <th className="py-2.5 px-3">Location Route</th>
-                <th className="py-2.5 px-3">Reason / Ref</th>
-                <th className="py-2.5 px-3">Operator</th>
-                <th className="py-2.5 px-3">Timestamp</th>
+              <tr className="border-b border-slate-200/60 dark:border-slate-800 text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider bg-slate-500/5 text-xs">
+                <th className="py-4 px-4">Transaction ID</th>
+                <th className="py-4 px-4">Action</th>
+                <th className="py-4 px-4">Product Code & Name</th>
+                <th className="py-4 px-4">Quantity</th>
+                <th className="py-4 px-4">Shelf Route</th>
+                <th className="py-4 px-4">Reason / Reference</th>
+                <th className="py-4 px-4">Staff Member</th>
+                <th className="py-4 px-4">Date & Time</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-200/40 dark:divide-slate-800/60">
               {filteredMovements.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="py-12 text-center text-slate-400">
-                    <Boxes className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                    <span>No stock movements match the filter criteria.</span>
+                  <td colSpan={8} className="py-16 text-center text-slate-400">
+                    <Boxes className="w-10 h-10 mx-auto mb-3 opacity-40" />
+                    <span className="text-base font-medium">No inventory transactions match the filter criteria.</span>
                   </td>
                 </tr>
               ) : (
                 filteredMovements.map((m) => (
                   <tr key={m.movementId} className="hover:bg-white/40 dark:hover:bg-slate-800/40 transition-colors">
-                    <td className="py-2.5 px-3 font-mono text-[11px] text-slate-500 dark:text-slate-400">
+                    <td className="py-4 px-4 font-mono text-xs text-slate-500 dark:text-slate-400">
                       {m.movementId.slice(0, 8)}
                     </td>
-                    <td className="py-2.5 px-3">
+                    <td className="py-4 px-4">
                       <StatusChip status={m.movementType} />
                     </td>
-                    <td className="py-2.5 px-3 font-medium text-slate-900 dark:text-white">
+                    <td className="py-4 px-4 font-bold text-slate-900 dark:text-white">
                       {m.productId}
                     </td>
-                    <td className="py-2.5 px-3 font-mono font-bold text-slate-900 dark:text-white">
-                      {m.quantity}
+                    <td className="py-4 px-4 font-mono font-extrabold text-slate-900 dark:text-white text-base">
+                      {m.quantity} units
                     </td>
-                    <td className="py-2.5 px-3 font-mono text-slate-500 dark:text-slate-400 text-[11px]">
-                      {m.sourceBin || 'EXTERNAL'} &rarr; {m.targetBin || 'EXTERNAL'}
+                    <td className="py-4 px-4 font-mono text-slate-600 dark:text-slate-300 text-xs">
+                      {m.sourceBin || 'Receiving Dock'} &rarr; {m.targetBin || 'Shipping Dock'}
                     </td>
-                    <td className="py-2.5 px-3 text-slate-500 dark:text-slate-400 max-w-xs truncate">
+                    <td className="py-4 px-4 text-slate-600 dark:text-slate-300 max-w-xs truncate text-xs">
                       {m.reason || '-'}
                     </td>
-                    <td className="py-2.5 px-3 text-slate-700 dark:text-slate-300 font-medium">
+                    <td className="py-4 px-4 text-slate-800 dark:text-slate-200 font-semibold">
                       {m.operatorId}
                     </td>
-                    <td className="py-2.5 px-3 text-slate-400 font-mono text-[10px]">
+                    <td className="py-4 px-4 text-slate-400 font-mono text-xs">
                       {new Date(m.timestamp).toLocaleString()}
                     </td>
                   </tr>

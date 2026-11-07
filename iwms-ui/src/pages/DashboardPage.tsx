@@ -103,97 +103,97 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
   const categoryChartData = Object.entries(categoryDataMap).map(([name, val]) => ({
     name,
     units: val.units,
-    skus: val.count,
+    productCount: val.count,
   }));
 
   const COLORS = ['#6366f1', '#a855f7', '#10b981', '#f59e0b', '#ec4899', '#3b82f6'];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Top Banner & Quick Action Buttons */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
-            Warehouse Dashboard
+          <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+            Warehouse Overview & Dashboard
           </h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-            Real-time stock valuation, category distribution, and low stock radar.
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+            Real-time inventory valuation, product category distribution, and low stock notifications.
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           <button
             onClick={() => onOpenMovementModal('IN')}
-            className="glass-button-primary text-xs py-2 px-3"
+            className="glass-button-primary text-sm py-2.5 px-4"
           >
-            <ArrowDownRight className="w-3.5 h-3.5" />
-            <span>Stock In</span>
+            <ArrowDownRight className="w-4 h-4" />
+            <span>Receive Stock</span>
           </button>
           <button
             onClick={() => onOpenMovementModal('OUT')}
-            className="glass-button-secondary text-xs py-2 px-3 hover:text-rose-600"
+            className="glass-button-secondary text-sm py-2.5 px-4 hover:text-rose-600"
           >
-            <ArrowUpRight className="w-3.5 h-3.5" />
-            <span>Stock Out</span>
+            <ArrowUpRight className="w-4 h-4" />
+            <span>Dispatch Stock</span>
           </button>
           <button
             onClick={() => onOpenMovementModal('TRANSFER')}
-            className="glass-button-secondary text-xs py-2 px-3"
+            className="glass-button-secondary text-sm py-2.5 px-4"
           >
-            <ArrowLeftRight className="w-3.5 h-3.5" />
-            <span>Transfer</span>
+            <ArrowLeftRight className="w-4 h-4" />
+            <span>Transfer Location</span>
           </button>
         </div>
       </div>
 
       {/* KPI Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Total SKUs */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        {/* Total Products */}
         <GlassCard hoverEffect>
           <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 mb-2">
-            <span className="text-xs font-semibold uppercase tracking-wider">Catalog SKUs</span>
-            <Boxes className="w-4 h-4 text-indigo-500" />
+            <span className="text-sm font-bold uppercase tracking-wider">Total Products</span>
+            <Boxes className="w-5 h-5 text-indigo-500" />
           </div>
-          <div className="text-3xl font-extrabold text-slate-900 dark:text-white font-mono">
+          <div className="text-4xl font-extrabold text-slate-900 dark:text-white font-mono">
             {totalSkus}
           </div>
-          <div className="text-xs text-slate-500 dark:text-slate-400 mt-1 flex items-center justify-between">
-            <span>Active Product Items</span>
-            <span className="text-emerald-500 font-medium">100% Synced</span>
+          <div className="text-sm text-slate-500 dark:text-slate-400 mt-2 flex items-center justify-between">
+            <span>Distinct Catalog Items</span>
+            <span className="text-emerald-500 font-semibold">100% Synced</span>
           </div>
         </GlassCard>
 
         {/* Total Units On Hand */}
         <GlassCard hoverEffect>
           <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 mb-2">
-            <span className="text-xs font-semibold uppercase tracking-wider">Total Units</span>
-            <Layers className="w-4 h-4 text-purple-500" />
+            <span className="text-sm font-bold uppercase tracking-wider">Total Items in Stock</span>
+            <Layers className="w-5 h-5 text-purple-500" />
           </div>
-          <div className="text-3xl font-extrabold text-slate-900 dark:text-white font-mono">
+          <div className="text-4xl font-extrabold text-slate-900 dark:text-white font-mono">
             {totalUnits.toLocaleString()}
           </div>
-          <div className="text-xs text-slate-500 dark:text-slate-400 mt-1 flex items-center justify-between">
+          <div className="text-sm text-slate-500 dark:text-slate-400 mt-2 flex items-center justify-between">
             <span>Physical Floor Stock</span>
-            <span className="text-indigo-500 font-medium">Across All Bins</span>
+            <span className="text-indigo-500 font-semibold">All Storage Shelves</span>
           </div>
         </GlassCard>
 
         {/* Low Stock Alerts */}
         <GlassCard hoverEffect>
           <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 mb-2">
-            <span className="text-xs font-semibold uppercase tracking-wider">Low Stock Radar</span>
-            <AlertTriangle className={`w-4 h-4 ${lowStockProducts.length > 0 ? 'text-amber-500 animate-pulse' : 'text-slate-400'}`} />
+            <span className="text-sm font-bold uppercase tracking-wider">Low Stock Warnings</span>
+            <AlertTriangle className={`w-5 h-5 ${lowStockProducts.length > 0 ? 'text-amber-500 animate-pulse' : 'text-slate-400'}`} />
           </div>
-          <div className="text-3xl font-extrabold text-amber-600 dark:text-amber-400 font-mono">
+          <div className="text-4xl font-extrabold text-amber-600 dark:text-amber-400 font-mono">
             {lowStockProducts.length}
           </div>
-          <div className="text-xs text-slate-500 dark:text-slate-400 mt-1 flex items-center justify-between">
-            <span>Below Reorder Point</span>
+          <div className="text-sm text-slate-500 dark:text-slate-400 mt-2 flex items-center justify-between">
+            <span>Below Reorder Level</span>
             <button
               onClick={() => onNavigateToTab('inventory')}
-              className="text-amber-600 dark:text-amber-400 hover:underline font-medium"
+              className="text-amber-600 dark:text-amber-400 hover:underline font-semibold"
             >
-              Inspect &rarr;
+              Review Items &rarr;
             </button>
           </div>
         </GlassCard>
@@ -201,19 +201,19 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
         {/* Inventory Valuation */}
         <GlassCard hoverEffect>
           <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 mb-2">
-            <span className="text-xs font-semibold uppercase tracking-wider">Inventory Valuation</span>
-            <DollarSign className="w-4 h-4 text-emerald-500" />
+            <span className="text-sm font-bold uppercase tracking-wider">Total Inventory Value</span>
+            <DollarSign className="w-5 h-5 text-emerald-500" />
           </div>
-          <div className="text-3xl font-extrabold text-emerald-600 dark:text-emerald-400 font-mono">
+          <div className="text-4xl font-extrabold text-emerald-600 dark:text-emerald-400 font-mono">
             {isAdmin || isManager ? (
               `$${totalValuation.toLocaleString(undefined, { maximumFractionDigits: 0 })}`
             ) : (
-              <span className="text-slate-400 text-lg">Confidential (Admin Only)</span>
+              <span className="text-slate-400 text-lg">Confidential</span>
             )}
           </div>
-          <div className="text-xs text-slate-500 dark:text-slate-400 mt-1 flex items-center justify-between">
-            <span>Asset Book Value</span>
-            <span className="text-emerald-500 font-medium">FIFO Valuation</span>
+          <div className="text-sm text-slate-500 dark:text-slate-400 mt-2 flex items-center justify-between">
+            <span>Asset Valuation</span>
+            <span className="text-emerald-500 font-semibold">First-In First-Out</span>
           </div>
         </GlassCard>
       </div>
@@ -269,39 +269,39 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
         {/* Low Stock Radar Table */}
         <GlassCard>
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
-              <AlertTriangle className="w-4 h-4 text-amber-500" />
+            <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <AlertTriangle className="w-5 h-5 text-amber-500" />
               <span>Low Stock Alerts</span>
             </h3>
-            <span className="text-xs px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 font-mono">
+            <span className="text-sm px-3 py-1 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 font-bold font-mono">
               {lowStockProducts.length} items
             </span>
           </div>
 
-          <div className="space-y-2.5 max-h-64 overflow-y-auto pr-1">
+          <div className="space-y-3 max-h-72 overflow-y-auto pr-1">
             {lowStockProducts.length === 0 ? (
-              <div className="text-center py-10 text-xs text-slate-400">
-                All stock levels are optimal!
+              <div className="text-center py-12 text-sm text-slate-400 font-medium">
+                All inventory stock levels are optimal!
               </div>
             ) : (
               lowStockProducts.slice(0, 6).map((p) => (
                 <div
                   key={p.id}
-                  className="p-2.5 rounded-xl bg-white/40 dark:bg-slate-800/40 border border-slate-200/50 dark:border-slate-700/50 flex items-center justify-between"
+                  className="p-3 rounded-xl bg-white/40 dark:bg-slate-800/40 border border-slate-200/50 dark:border-slate-700/50 flex items-center justify-between"
                 >
-                  <div className="truncate mr-2">
-                    <div className="text-xs font-semibold text-slate-900 dark:text-white truncate">
+                  <div className="truncate mr-3">
+                    <div className="text-sm font-bold text-slate-900 dark:text-white truncate">
                       {p.name}
                     </div>
-                    <div className="text-[10px] text-slate-500 dark:text-slate-400 font-mono">
-                      {p.sku} &bull; {p.binLocation}
+                    <div className="text-xs text-slate-500 dark:text-slate-400 font-mono mt-0.5">
+                      Item Code: <span className="font-semibold text-indigo-500">{p.sku}</span> &bull; Shelf: {p.binLocation}
                     </div>
                   </div>
                   <div className="text-right shrink-0">
-                    <span className="text-xs font-mono font-bold text-rose-600 dark:text-rose-400">
-                      {p.quantity} / {p.reorderPoint}
+                    <span className="text-sm font-mono font-bold text-rose-600 dark:text-rose-400">
+                      {p.quantity} / {p.reorderPoint} units
                     </span>
-                    <div className="text-[10px] text-slate-400">Reorder Req</div>
+                    <div className="text-xs text-slate-400 font-medium">Reorder Needed</div>
                   </div>
                 </div>
               ))
@@ -312,62 +312,62 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
 
       {/* Recent Movements Stream */}
       <GlassCard>
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between mb-5">
           <div>
-            <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
-              <RefreshCw className="w-4 h-4 text-purple-500" />
-              <span>Recent Stock Movements (WAL Feed)</span>
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <RefreshCw className="w-5 h-5 text-purple-500" />
+              <span>Recent Inventory Transactions (Audit Log)</span>
             </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
-              Sequential append-only transaction stream
+            <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
+              Verified record of all stock-in, dispatch, and internal warehouse movements
             </p>
           </div>
           <button
             onClick={() => onNavigateToTab('movements')}
-            className="text-xs text-indigo-600 dark:text-indigo-400 hover:underline font-medium"
+            className="text-sm text-indigo-600 dark:text-indigo-400 hover:underline font-bold"
           >
             View Full Timeline &rarr;
           </button>
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
+          <table className="w-full text-left text-sm">
             <thead>
-              <tr className="border-b border-slate-200/60 dark:border-slate-800 text-slate-400 font-semibold uppercase tracking-wider">
-                <th className="py-2.5 px-3">Type</th>
-                <th className="py-2.5 px-3">Product / SKU</th>
-                <th className="py-2.5 px-3">Quantity</th>
-                <th className="py-2.5 px-3">Source &rarr; Target</th>
-                <th className="py-2.5 px-3">Operator</th>
-                <th className="py-2.5 px-3">Timestamp</th>
+              <tr className="border-b border-slate-200/60 dark:border-slate-800 text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider text-xs">
+                <th className="py-3.5 px-4">Transaction Type</th>
+                <th className="py-3.5 px-4">Item Code & Name</th>
+                <th className="py-3.5 px-4">Quantity</th>
+                <th className="py-3.5 px-4">Origin &rarr; Destination</th>
+                <th className="py-3.5 px-4">Operator / Staff</th>
+                <th className="py-3.5 px-4">Timestamp</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-200/40 dark:divide-slate-800/60">
               {movements.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="py-6 text-center text-slate-400">
-                    No recent movements recorded yet.
+                  <td colSpan={6} className="py-8 text-center text-sm text-slate-400">
+                    No recent inventory transactions recorded yet.
                   </td>
                 </tr>
               ) : (
                 movements.map((m) => (
                   <tr key={m.movementId} className="hover:bg-white/40 dark:hover:bg-slate-800/40 transition-colors">
-                    <td className="py-2.5 px-3">
+                    <td className="py-3.5 px-4">
                       <StatusChip status={m.movementType} />
                     </td>
-                    <td className="py-2.5 px-3 font-medium text-slate-900 dark:text-white">
+                    <td className="py-3.5 px-4 font-semibold text-slate-900 dark:text-white">
                       {m.productId}
                     </td>
-                    <td className="py-2.5 px-3 font-mono font-bold text-slate-900 dark:text-white">
-                      {m.quantity}
+                    <td className="py-3.5 px-4 font-mono font-extrabold text-slate-900 dark:text-white">
+                      {m.quantity} units
                     </td>
-                    <td className="py-2.5 px-3 text-slate-500 dark:text-slate-400 font-mono text-[11px]">
-                      {m.sourceBin || 'EXT'} &rarr; {m.targetBin || 'EXT'}
+                    <td className="py-3.5 px-4 text-slate-600 dark:text-slate-300 font-mono text-xs">
+                      {m.sourceBin || 'Receiving Dock'} &rarr; {m.targetBin || 'Shipping Dock'}
                     </td>
-                    <td className="py-2.5 px-3 text-slate-600 dark:text-slate-300">
+                    <td className="py-3.5 px-4 text-slate-700 dark:text-slate-200 font-medium">
                       {m.operatorId}
                     </td>
-                    <td className="py-2.5 px-3 text-slate-400 font-mono text-[10px]">
+                    <td className="py-3.5 px-4 text-slate-400 font-mono text-xs">
                       {new Date(m.timestamp).toLocaleTimeString()}
                     </td>
                   </tr>

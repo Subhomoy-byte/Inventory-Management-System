@@ -68,23 +68,23 @@ export const WarehouseMapPage: React.FC<WarehouseMapPageProps> = ({ onOpenMoveme
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white flex items-center gap-2">
-            <MapPin className="w-6 h-6 text-indigo-500" />
+          <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white flex items-center gap-3">
+            <MapPin className="w-8 h-8 text-indigo-500" />
             <span>2D Warehouse Floor Map</span>
           </h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-            Topology hierarchy (Warehouse &rarr; Zones &rarr; Bins) with capacity utilization.
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+            Visual facility layout (Warehouse &rarr; Zones &rarr; Storage Shelves) with real-time capacity and occupancy tracking.
           </p>
         </div>
 
         {/* Warehouse Selector */}
         {warehouses.length > 1 && (
-          <div className="flex items-center gap-2">
-            <span className="text-xs text-slate-400 font-medium">Facility:</span>
+          <div className="flex items-center gap-3">
+            <span className="text-sm text-slate-400 font-semibold">Facility:</span>
             <select
               value={selectedWarehouseId}
               onChange={(e) => setSelectedWarehouseId(e.target.value)}
-              className="glass-input text-xs py-1.5"
+              className="glass-input text-sm py-2"
             >
               {warehouses.map((w) => (
                 <option key={w.id} value={w.id} className="bg-slate-900 text-white">
@@ -98,32 +98,32 @@ export const WarehouseMapPage: React.FC<WarehouseMapPageProps> = ({ onOpenMoveme
 
       {/* Main Floor Grid */}
       {currentWarehouse ? (
-        <div className="space-y-6">
+        <div className="space-y-8">
           {currentWarehouse.zones.map((zone) => (
-            <GlassCard key={zone.id} className="p-5">
+            <GlassCard key={zone.id} className="p-6">
               {/* Zone Header */}
-              <div className="flex items-center justify-between pb-3 mb-4 border-b border-slate-200/50 dark:border-slate-800">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-bold text-xs">
+              <div className="flex items-center justify-between pb-4 mb-5 border-b border-slate-200/50 dark:border-slate-800">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-2xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-extrabold text-base">
                     {zone.name.charAt(0)}
                   </div>
                   <div>
-                    <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white">
                       {zone.name}
                     </h3>
-                    <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                      Category Preference: <span className="font-medium text-indigo-600 dark:text-indigo-400">{zone.categoryPreference}</span>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                      Category Preference: <span className="font-semibold text-indigo-600 dark:text-indigo-400">{zone.categoryPreference}</span>
                     </p>
                   </div>
                 </div>
 
-                <span className="text-xs font-mono text-slate-400">
-                  {zone.bins.length} Storage Bins
+                <span className="text-sm font-mono font-bold text-slate-400">
+                  {zone.bins.length} Storage Shelves
                 </span>
               </div>
 
               {/* Bins Grid */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3.5">
                 {zone.bins.map((bin) => {
                   const binProducts = getProductsInBin(bin.code);
                   const currentUnits = binProducts.reduce((acc, p) => acc + p.quantity, 0);
@@ -148,32 +148,32 @@ export const WarehouseMapPage: React.FC<WarehouseMapPageProps> = ({ onOpenMoveme
                     <button
                       key={bin.id}
                       onClick={() => setSelectedBin(bin)}
-                      className={`p-3 rounded-xl border text-left transition-all hover:scale-[1.02] hover:shadow-lg hover:ring-2 ${ringColor} ${
+                      className={`p-3.5 rounded-2xl border text-left transition-all hover:scale-[1.02] hover:shadow-lg hover:ring-2 ${ringColor} ${
                         isSelected
                           ? 'bg-indigo-500/15 border-indigo-500 ring-2 ring-indigo-500/50'
                           : 'bg-white/40 dark:bg-slate-800/40 border-slate-200/60 dark:border-slate-700/60'
                       }`}
                     >
-                      <div className="flex items-center justify-between mb-1.5">
-                        <span className="font-mono font-bold text-xs text-slate-900 dark:text-white">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="font-mono font-bold text-sm text-slate-900 dark:text-white">
                           {bin.code}
                         </span>
-                        <span className="text-[10px] font-mono text-slate-400">
+                        <span className="text-xs font-mono font-semibold text-slate-400">
                           {fillPercent}%
                         </span>
                       </div>
 
                       {/* Fill Progress Bar */}
-                      <div className="w-full h-1.5 rounded-full bg-slate-200/70 dark:bg-slate-700/70 overflow-hidden mb-2">
+                      <div className="w-full h-2 rounded-full bg-slate-200/70 dark:bg-slate-700/70 overflow-hidden mb-2">
                         <div
                           className={`h-full rounded-full transition-all duration-300 ${fillBg}`}
                           style={{ width: `${fillPercent}%` }}
                         />
                       </div>
 
-                      <div className="flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400">
+                      <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 font-medium">
                         <span className="font-mono">{currentUnits} / {bin.capacityQuantity} u</span>
-                        <span>{binProducts.length} skus</span>
+                        <span className="font-semibold text-indigo-500">{binProducts.length} items</span>
                       </div>
                     </button>
                   );
@@ -204,44 +204,44 @@ export const WarehouseMapPage: React.FC<WarehouseMapPageProps> = ({ onOpenMoveme
                 <Box className="w-6 h-6" />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white font-mono">
-                  Bin Inspection: {selectedBin.code}
+                <h3 className="text-xl font-bold text-slate-900 dark:text-white font-mono">
+                  Storage Shelf Inspection: {selectedBin.code}
                 </h3>
-                <p className="text-xs text-slate-500 dark:text-slate-400">
-                  Capacity: {selectedBin.capacityQuantity} units &bull; Max Weight: {selectedBin.maxWeightKg} kg
+                <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
+                  Maximum Capacity: {selectedBin.capacityQuantity} units &bull; Weight Limit: {selectedBin.maxWeightKg} kg
                 </p>
               </div>
             </div>
 
-            <div className="mt-4">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
-                Stored Items In This Bin:
+            <div className="mt-5">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">
+                Products Stored On This Shelf:
               </h4>
 
-              <div className="space-y-2 max-h-60 overflow-y-auto pr-1">
+              <div className="space-y-3 max-h-64 overflow-y-auto pr-1">
                 {getProductsInBin(selectedBin.code).length === 0 ? (
-                  <div className="p-6 text-center text-xs text-slate-400 bg-white/30 dark:bg-slate-800/30 rounded-xl">
-                    Bin is currently empty.
+                  <div className="p-8 text-center text-sm text-slate-400 bg-white/30 dark:bg-slate-800/30 rounded-2xl">
+                    This storage shelf is currently empty.
                   </div>
                 ) : (
                   getProductsInBin(selectedBin.code).map((p) => (
                     <div
                       key={p.id}
-                      className="p-3 rounded-xl bg-white/40 dark:bg-slate-800/40 border border-slate-200/50 dark:border-slate-700/50 flex items-center justify-between text-xs"
+                      className="p-3.5 rounded-xl bg-white/40 dark:bg-slate-800/40 border border-slate-200/50 dark:border-slate-700/50 flex items-center justify-between text-sm"
                     >
                       <div>
-                        <div className="font-semibold text-slate-900 dark:text-white">
+                        <div className="font-bold text-slate-900 dark:text-white">
                           {p.name}
                         </div>
-                        <div className="text-[10px] font-mono text-indigo-500">
-                          {p.sku} &bull; {p.category}
+                        <div className="text-xs font-mono font-semibold text-indigo-500 mt-0.5">
+                          Code: {p.sku} &bull; {p.category}
                         </div>
                       </div>
                       <div className="text-right">
-                        <span className="font-mono font-bold text-slate-900 dark:text-white">
+                        <span className="font-mono font-bold text-slate-900 dark:text-white text-base">
                           {p.quantity} units
                         </span>
-                        <div>
+                        <div className="mt-1">
                           <StatusChip status={p.status} />
                         </div>
                       </div>
@@ -251,10 +251,10 @@ export const WarehouseMapPage: React.FC<WarehouseMapPageProps> = ({ onOpenMoveme
               </div>
             </div>
 
-            <div className="mt-6 flex items-center justify-end gap-2 pt-3 border-t border-slate-200/60 dark:border-slate-800">
+            <div className="mt-6 flex items-center justify-end gap-3 pt-4 border-t border-slate-200/60 dark:border-slate-800">
               <button
                 onClick={() => setSelectedBin(null)}
-                className="glass-button-secondary text-xs"
+                className="glass-button-secondary text-sm py-2.5 px-4"
               >
                 Close
               </button>
@@ -263,10 +263,10 @@ export const WarehouseMapPage: React.FC<WarehouseMapPageProps> = ({ onOpenMoveme
                   setSelectedBin(null);
                   onOpenMovementModal('IN');
                 }}
-                className="glass-button-primary text-xs"
+                className="glass-button-primary text-sm py-2.5 px-4"
               >
-                <span>Stock In To Bin</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                <span>Receive Stock to this Shelf</span>
+                <ArrowRight className="w-4 h-4" />
               </button>
             </div>
           </div>

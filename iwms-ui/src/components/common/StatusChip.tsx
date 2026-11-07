@@ -9,7 +9,24 @@ interface StatusChipProps {
 }
 
 export const StatusChip: React.FC<StatusChipProps> = ({ status, label, className }) => {
-  const text = label || status || 'UNKNOWN';
+  const getReadableLabel = (s?: string) => {
+    switch (s) {
+      case 'OPTIMAL': return 'Optimal Stock';
+      case 'LOW_STOCK': return 'Low Stock';
+      case 'CRITICAL': return 'Critical Shortage';
+      case 'OVERSTOCKED': return 'Overstocked';
+      case 'IN': return 'Stock In';
+      case 'OUT': return 'Stock Out';
+      case 'TRANSFER': return 'Shelf Transfer';
+      case 'ADJUST': return 'Audit Adjustment';
+      case 'ADMIN': return 'Administrator';
+      case 'MANAGER': return 'Manager';
+      case 'EMPLOYEE': return 'Staff Member';
+      default: return s || 'Unknown';
+    }
+  };
+
+  const text = label || getReadableLabel(status);
 
   let colorClasses = 'bg-slate-500/10 text-slate-700 dark:text-slate-300 border-slate-400/20';
 

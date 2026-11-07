@@ -99,76 +99,76 @@ export const OrdersPage: React.FC<OrdersPageProps> = ({ products, onRefreshCatal
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white flex items-center gap-2">
-            <ShoppingCart className="w-6 h-6 text-indigo-500" />
+          <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white flex items-center gap-3">
+            <ShoppingCart className="w-8 h-8 text-indigo-500" />
             <span>Purchase Order Management</span>
           </h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-            Procurement workflows, supplier orders, and 1-click dock receiving with automatic stock-in.
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+            Supplier procurement, order dispatch tracking, and 1-click receiving with automated inventory stock-in.
           </p>
         </div>
 
         <button
           onClick={() => setIsNewOrderModalOpen(true)}
-          className="glass-button-primary text-xs py-2 px-3"
+          className="glass-button-primary text-sm py-2.5 px-4"
         >
-          <Plus className="w-3.5 h-3.5" />
+          <Plus className="w-4 h-4" />
           <span>Create Purchase Order</span>
         </button>
       </div>
 
       {/* Orders List */}
-      <div className="space-y-3">
+      <div className="space-y-4">
         {orders.map((po) => {
           const totalItemsCount = Object.values(po.items).reduce((a, b) => a + b, 0);
 
           return (
-            <GlassCard key={po.orderId} hoverEffect className="p-5">
+            <GlassCard key={po.orderId} hoverEffect className="p-6">
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2.5">
-                    <span className="font-mono font-bold text-sm text-slate-900 dark:text-white">
-                      {po.orderId}
+                <div className="space-y-1.5">
+                  <div className="flex items-center gap-3">
+                    <span className="font-mono font-extrabold text-base text-slate-900 dark:text-white">
+                      Order #{po.orderId}
                     </span>
                     <span
-                      className={`px-2 py-0.5 rounded-full text-xs font-semibold border ${
+                      className={`px-3 py-1 rounded-full text-xs font-bold border ${
                         po.status === 'RECEIVED'
                           ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30'
                           : 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/30'
                       }`}
                     >
-                      {po.status}
+                      {po.status === 'RECEIVED' ? 'Received & Stored' : 'Pending Delivery'}
                     </span>
                   </div>
 
-                  <div className="flex items-center gap-3 text-xs text-slate-500 dark:text-slate-400">
-                    <span className="flex items-center gap-1 font-medium text-slate-700 dark:text-slate-300">
-                      <Truck className="w-3.5 h-3.5 text-indigo-500" />
-                      {po.supplierId}
+                  <div className="flex items-center gap-3 text-sm text-slate-500 dark:text-slate-400">
+                    <span className="flex items-center gap-1.5 font-semibold text-slate-700 dark:text-slate-300">
+                      <Truck className="w-4 h-4 text-indigo-500" />
+                      Supplier: {po.supplierId}
                     </span>
                     <span>&bull;</span>
-                    <span className="flex items-center gap-1 font-mono text-[11px]">
-                      <Calendar className="w-3.5 h-3.5" />
-                      Ordered: {po.orderDate}
+                    <span className="flex items-center gap-1.5 font-mono text-xs">
+                      <Calendar className="w-4 h-4" />
+                      Order Date: {po.orderDate}
                     </span>
                     <span>&bull;</span>
-                    <span className="font-mono text-[11px]">
-                      Expected: {po.expectedDeliveryDate}
+                    <span className="font-mono text-xs">
+                      Expected Arrival: {po.expectedDeliveryDate}
                     </span>
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between md:justify-end gap-4 border-t md:border-t-0 pt-3 md:pt-0 border-slate-200/50 dark:border-slate-800">
+                <div className="flex items-center justify-between md:justify-end gap-5 border-t md:border-t-0 pt-3 md:pt-0 border-slate-200/50 dark:border-slate-800">
                   <div className="text-right">
-                    <div className="text-xs font-bold text-slate-900 dark:text-white font-mono">
+                    <div className="text-base font-extrabold text-slate-900 dark:text-white font-mono">
                       {totalItemsCount} units
                     </div>
-                    <div className="text-[10px] text-slate-400">
-                      {Object.keys(po.items).length} distinct lines
+                    <div className="text-xs text-slate-400 font-medium">
+                      {Object.keys(po.items).length} product items
                     </div>
                   </div>
 
@@ -176,23 +176,23 @@ export const OrdersPage: React.FC<OrdersPageProps> = ({ products, onRefreshCatal
                     <button
                       onClick={() => handleReceiveOrder(po)}
                       disabled={receivingId === po.orderId}
-                      className="glass-button-primary text-xs py-1.5 px-3 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700"
+                      className="glass-button-primary text-sm py-2 px-4 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700"
                     >
                       {receivingId === po.orderId ? (
-                        <span className="inline-block w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                        <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                       ) : (
                         <>
-                          <CheckCircle className="w-3.5 h-3.5" />
-                          <span>Receive at Dock</span>
+                          <CheckCircle className="w-4 h-4" />
+                          <span>Receive at Loading Dock</span>
                         </>
                       )}
                     </button>
                   )}
 
                   {po.status === 'RECEIVED' && (
-                    <div className="flex items-center gap-1 text-xs text-emerald-600 dark:text-emerald-400 font-semibold px-2 py-1 rounded-lg bg-emerald-500/10">
-                      <FileCheck className="w-3.5 h-3.5" />
-                      <span>Stock In Completed</span>
+                    <div className="flex items-center gap-1.5 text-sm text-emerald-600 dark:text-emerald-400 font-bold px-3 py-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
+                      <FileCheck className="w-4 h-4" />
+                      <span>Stock In Complete</span>
                     </div>
                   )}
                 </div>
@@ -205,7 +205,7 @@ export const OrdersPage: React.FC<OrdersPageProps> = ({ products, onRefreshCatal
       {/* New Order Modal */}
       {isNewOrderModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="w-full max-w-md glass-panel p-6 shadow-2xl ring-1 ring-white/20 relative">
+          <div className="w-full max-w-lg glass-panel p-6 shadow-2xl ring-1 ring-white/20 relative">
             <button
               onClick={() => setIsNewOrderModalOpen(false)}
               className="absolute top-5 right-5 p-2 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-white/40 dark:hover:bg-slate-800/40"
@@ -213,36 +213,37 @@ export const OrdersPage: React.FC<OrdersPageProps> = ({ products, onRefreshCatal
               <X className="w-5 h-5" />
             </button>
 
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-4">
+            <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-5">
               Create New Purchase Order
             </h3>
 
             <form onSubmit={handleCreateOrder} className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1.5">
-                  Supplier Name
+                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1.5">
+                  Supplier Name / Company
                 </label>
                 <input
                   type="text"
                   required
                   value={supplierName}
                   onChange={(e) => setSupplierName(e.target.value)}
-                  className="glass-input text-xs"
+                  className="glass-input text-sm"
+                  placeholder="e.g. Apex Global Distributors"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1.5">
+                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1.5">
                   Select Product Item
                 </label>
                 <select
                   value={selectedProductId}
                   onChange={(e) => setSelectedProductId(e.target.value)}
-                  className="glass-input text-xs"
+                  className="glass-input text-sm"
                 >
                   {products.map((p) => (
                     <option key={p.id} value={p.id} className="bg-slate-900 text-white">
-                      [{p.sku}] {p.name}
+                      [Code: {p.sku}] {p.name}
                     </option>
                   ))}
                 </select>
@@ -277,16 +278,16 @@ export const OrdersPage: React.FC<OrdersPageProps> = ({ products, onRefreshCatal
                 </div>
               </div>
 
-              <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-200/60 dark:border-slate-800">
+              <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-200/60 dark:border-slate-800">
                 <button
                   type="button"
                   onClick={() => setIsNewOrderModalOpen(false)}
-                  className="glass-button-secondary text-xs"
+                  className="glass-button-secondary text-sm"
                 >
                   Cancel
                 </button>
-                <button type="submit" className="glass-button-primary text-xs">
-                  Generate PO
+                <button type="submit" className="glass-button-primary text-sm">
+                  Create Purchase Order
                 </button>
               </div>
             </form>

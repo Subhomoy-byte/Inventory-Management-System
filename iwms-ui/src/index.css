@@ -38,23 +38,23 @@
   }
 
   .glass-input {
-    @apply w-full px-4 py-2.5 rounded-xl bg-white/50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-700/80 text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all backdrop-blur-md;
+    @apply w-full px-4 py-3 rounded-xl bg-white/50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-700/80 text-base text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all backdrop-blur-md;
   }
 
   .glass-button-primary {
-    @apply px-4 py-2.5 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-medium shadow-md shadow-indigo-500/25 hover:shadow-lg hover:shadow-indigo-500/40 hover:from-indigo-600 hover:to-purple-700 active:scale-95 transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2;
+    @apply px-5 py-3 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white text-base font-semibold shadow-md shadow-indigo-500/25 hover:shadow-lg hover:shadow-indigo-500/40 hover:from-indigo-600 hover:to-purple-700 active:scale-95 transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2;
   }
 
   .glass-button-secondary {
-    @apply px-4 py-2.5 rounded-xl bg-white/60 dark:bg-slate-800/60 hover:bg-white/80 dark:hover:bg-slate-700/70 text-slate-700 dark:text-slate-200 border border-slate-200/60 dark:border-slate-700/60 font-medium shadow-sm hover:shadow active:scale-95 transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 backdrop-blur-md;
+    @apply px-5 py-3 rounded-xl bg-white/60 dark:bg-slate-800/60 hover:bg-white/80 dark:hover:bg-slate-700/70 text-slate-700 dark:text-slate-200 border border-slate-200/60 dark:border-slate-700/60 text-base font-semibold shadow-sm hover:shadow active:scale-95 transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 backdrop-blur-md;
   }
 
   .glass-dock {
-    @apply bg-white/70 dark:bg-slate-900/70 backdrop-blur-2xl border border-white/40 dark:border-white/10 shadow-2xl rounded-full px-3 py-2 flex items-center gap-1.5 transition-all duration-300;
+    @apply bg-white/70 dark:bg-slate-900/70 backdrop-blur-2xl border border-white/40 dark:border-white/10 shadow-2xl rounded-full px-4 py-2.5 flex items-center gap-2 transition-all duration-300;
   }
 
   .badge-glow {
-    @apply relative inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold tracking-wide border;
+    @apply relative inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold tracking-wide border;
   }
 }
 

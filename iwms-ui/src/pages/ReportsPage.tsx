@@ -59,60 +59,60 @@ export const ReportsPage: React.FC<ReportsPageProps> = ({ products }) => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white flex items-center gap-2">
-            <FileText className="w-6 h-6 text-indigo-500" />
-            <span>Reports & Floor Sheets</span>
+          <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white flex items-center gap-3">
+            <FileText className="w-8 h-8 text-indigo-500" />
+            <span>Reports & Printable Floor Sheets</span>
           </h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-            Monochrome OpenPDF physical count sheets, CSV exports, and zip-slip-safe ZIP backups.
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+            Physical stock audit sheets, spreadsheet exports, and secure database archive backups.
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           <button
             onClick={handleDownloadCsv}
-            className="glass-button-secondary text-xs py-2 px-3"
+            className="glass-button-secondary text-sm py-2.5 px-4"
           >
-            <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-500" />
-            <span>Export Catalog CSV</span>
+            <FileSpreadsheet className="w-4 h-4 text-emerald-500" />
+            <span>Download Catalog Spreadsheet</span>
           </button>
           <button
             onClick={handleCreateBackup}
             disabled={backupLoading}
-            className="glass-button-secondary text-xs py-2 px-3"
+            className="glass-button-secondary text-sm py-2.5 px-4"
           >
-            <Database className={`w-3.5 h-3.5 text-purple-500 ${backupLoading ? 'animate-spin' : ''}`} />
-            <span>Create ZIP Backup</span>
+            <Database className={`w-4 h-4 text-purple-500 ${backupLoading ? 'animate-spin' : ''}`} />
+            <span>Create System Archive Backup</span>
           </button>
         </div>
       </div>
 
       {/* Backup Notification */}
       {backupMessage && (
-        <div className="p-3.5 rounded-xl bg-purple-500/10 border border-purple-500/30 text-purple-700 dark:text-purple-400 text-xs flex items-center justify-between">
+        <div className="p-4 rounded-xl bg-purple-500/10 border border-purple-500/30 text-purple-700 dark:text-purple-400 text-sm font-semibold flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <CheckCircle className="w-4 h-4 text-purple-500" />
+            <CheckCircle className="w-5 h-5 text-purple-500" />
             <span>{backupMessage}</span>
           </div>
-          <button onClick={() => setBackupMessage(null)} className="text-xs font-semibold hover:underline">
+          <button onClick={() => setBackupMessage(null)} className="text-sm font-bold hover:underline">
             Dismiss
           </button>
         </div>
       )}
 
       {/* PDF Controls & Role Redaction Notice */}
-      <GlassCard className="p-4">
+      <GlassCard className="p-5">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
-              Filter PDF By Category:
+            <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+              Filter Report by Category:
             </span>
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="glass-input text-xs py-1.5 w-48"
+              className="glass-input text-sm py-2 w-56"
             >
-              <option value="" className="bg-slate-900 text-white">All Categories (Full)</option>
+              <option value="" className="bg-slate-900 text-white">All Categories (Full Report)</option>
               {categories.map((c) => (
                 <option key={c} value={c} className="bg-slate-900 text-white">
                   {c}
@@ -121,11 +121,11 @@ export const ReportsPage: React.FC<ReportsPageProps> = ({ products }) => {
             </select>
           </div>
 
-          <div className="flex items-center gap-2">
-            <div className="flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-medium bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20">
-              <ShieldCheck className="w-3.5 h-3.5" />
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20">
+              <ShieldCheck className="w-4 h-4" />
               <span>
-                {isEmployee ? 'Employee View (Cost Prices Redacted)' : 'Manager View (Full Financials)'}
+                {isEmployee ? 'Staff View (Unit Costs Hidden)' : 'Administrator View (Full Financials)'}
               </span>
             </div>
 
@@ -133,10 +133,10 @@ export const ReportsPage: React.FC<ReportsPageProps> = ({ products }) => {
               href={pdfUrl}
               target="_blank"
               rel="noreferrer"
-              className="glass-button-primary text-xs py-1.5 px-3"
+              className="glass-button-primary text-sm py-2.5 px-4"
             >
-              <Printer className="w-3.5 h-3.5" />
-              <span>Open / Print PDF</span>
+              <Printer className="w-4 h-4" />
+              <span>Open Printable Report</span>
             </a>
           </div>
         </div>
