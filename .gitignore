@@ -35,6 +35,7 @@ dist-ssr/
 Thumbs.db
 *.log
 logs/
+.superpowers/
 
 # IWMS Runtime Data (keep structure, ignore runtime backups)
 /data/backups/

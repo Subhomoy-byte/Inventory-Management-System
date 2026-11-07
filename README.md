@@ -30,7 +30,8 @@ A full-stack, offline-capable inventory and warehouse management system designed
 ## Project Status & Roadmap
 
 - [x] **Project Inception & Architecture Specification** (Docs: [Design Specification](docs/superpowers/specs/2026-11-08-inventory-warehouse-management-system-design.md))
-- [ ] **Phase 1: Java Core Domain & JUnit 5 Tests**
+- [x] **Task 1: Maven Multi-Module Scaffolding** (`iwms-core`, `iwms-web`, Maven Wrapper, JUnit 5 SmokeTest verified)
+- [/] **Phase 1: Java Core Domain & JUnit 5 Tests**
 - [ ] **Phase 2: File Persistence Layer (Ledger, Audit, Backup)**
 - [ ] **Phase 3: Authentication, Session & REST API**
 - [ ] **Phase 4: OpenPDF Summary Report Generator**
