@@ -7,19 +7,23 @@ import { LoginPage } from './pages/LoginPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { InventoryPage } from './pages/InventoryPage';
 import { WarehouseMapPage } from './pages/WarehouseMapPage';
+import { MovementsPage } from './pages/MovementsPage';
+import { OrdersPage } from './pages/OrdersPage';
+import { CycleCountPage } from './pages/CycleCountPage';
+import { ReportsPage } from './pages/ReportsPage';
 import { ConflictReviewPanel } from './components/sync/ConflictReviewPanel';
 import { StockMovementModal } from './components/modals/StockMovementModal';
+import { CommandPalette } from './components/CommandPalette';
 import { OfflineSyncManager } from './storage/sync';
 import { api } from './services/api';
 import type { Product, MovementType } from './types';
-import { GlassCard } from './components/common/GlassCard';
-import { Boxes } from 'lucide-react';
 
 const MainLayout: React.FC = () => {
   const { isAuthenticated } = useAuth();
   const [currentTab, setCurrentTab] = useState<NavTab>('dashboard');
   const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [pendingSyncCount, setPendingSyncCount] = useState<number>(0);
+  const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState<boolean>(false);
 
   // Movement modal state
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -72,7 +76,7 @@ const MainLayout: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col pb-28">
-      <Navbar />
+      <Navbar onOpenCommandPalette={() => setIsCommandPaletteOpen(true)} />
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6">
         {currentTab === 'dashboard' && (
@@ -90,28 +94,25 @@ const MainLayout: React.FC = () => {
           <WarehouseMapPage onOpenMovementModal={handleOpenMovementModal} />
         )}
 
+        {currentTab === 'movements' && (
+          <MovementsPage />
+        )}
+
+        {currentTab === 'orders' && (
+          <OrdersPage products={allProducts} onRefreshCatalog={refreshCatalog} />
+        )}
+
+        {currentTab === 'cyclecount' && (
+          <CycleCountPage products={allProducts} onRefreshCatalog={refreshCatalog} />
+        )}
+
+        {currentTab === 'reports' && (
+          <ReportsPage products={allProducts} />
+        )}
+
         {currentTab === 'conflicts' && (
           <ConflictReviewPanel />
         )}
-
-        {currentTab !== 'dashboard' &&
-          currentTab !== 'inventory' &&
-          currentTab !== 'warehouse' &&
-          currentTab !== 'conflicts' && (
-            <GlassCard className="py-16 text-center space-y-4">
-              <div className="w-16 h-16 mx-auto rounded-2xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
-                <Boxes className="w-8 h-8" />
-              </div>
-              <div>
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white capitalize">
-                  {currentTab.replace('-', ' ')}
-                </h3>
-                <p className="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto mt-1">
-                  Ready for advanced operational features.
-                </p>
-              </div>
-            </GlassCard>
-          )}
       </main>
 
       <Dock
@@ -127,6 +128,13 @@ const MainLayout: React.FC = () => {
         allProducts={allProducts}
         initialType={modalType}
         onSuccess={refreshCatalog}
+      />
+
+      <CommandPalette
+        isOpen={isCommandPaletteOpen}
+        onClose={() => setIsCommandPaletteOpen(false)}
+        onSelectTab={setCurrentTab}
+        products={allProducts}
       />
     </div>
   );

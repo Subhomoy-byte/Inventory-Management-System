@@ -48,6 +48,11 @@ A full-stack, offline-capable inventory and warehouse management system designed
 | **PWA Offline Storage & Sync Engine** | [`db.ts`](iwms-ui/src/storage/db.ts), [`sync.ts`](iwms-ui/src/storage/sync.ts) | IndexedDB (`idb`) outbox queue, optimistic offline stock mutations, automated LAN reconnect flush, deficit conflict triage |
 | **2D Warehouse Topology Map** | [`WarehouseMapPage.tsx`](iwms-ui/src/pages/WarehouseMapPage.tsx) | Interactive 2D floor grid visualizing Zones, Bins, utilization fill percentages, and item inspection drawer |
 | **Real-time Inventory Management** | [`DashboardPage.tsx`](iwms-ui/src/pages/DashboardPage.tsx), [`InventoryPage.tsx`](iwms-ui/src/pages/InventoryPage.tsx) | Recharts category analytics, low stock radar, glass data table with search, category/status filters, and stock In/Out/Transfer modal |
+| **Time-Travel Ledger & LIFO Undo** | [`MovementsPage.tsx`](iwms-ui/src/pages/MovementsPage.tsx) | Scrubbable timeline querying `TreeMap.headMap()` for historical stock snapshots at any past minute; 1-click `ArrayDeque` undo |
+| **Purchase Order Receiving** | [`OrdersPage.tsx`](iwms-ui/src/pages/OrdersPage.tsx) | PO creation, supplier tracking, expected delivery dates, and 1-click dock receiving with automatic stock-in mutations |
+| **Guided Cycle Count & Reconciliation** | [`CycleCountPage.tsx`](iwms-ui/src/pages/CycleCountPage.tsx) | Physical floor audit sheet with instant surplus/deficit variance calculations and 1-click ledger reconciliation |
+| **OpenPDF Live Preview & ZIP Backups** | [`ReportsPage.tsx`](iwms-ui/src/pages/ReportsPage.tsx) | In-browser preview of monochrome A4 count sheets, CSV downloads, and on-demand zip-slip-safe compressed backups |
+| **Global Command Palette** | [`CommandPalette.tsx`](iwms-ui/src/components/CommandPalette.tsx) | `Ctrl + K` spotlight modal for instant keyboard navigation across all screens and rapid SKU search |
 
 ---
 
@@ -64,13 +69,14 @@ A full-stack, offline-capable inventory and warehouse management system designed
 - [x] **Task 8: Spring Boot REST API, Custom Auth Filter & HTTPS Keystore** (7 SpringBoot integration tests passing: Authentication, Token verification, Role-based cost price redaction, Inbound/Outbound REST mutations, PDF streaming. Total 44 multi-module tests passing)
 - [x] **Task 9: Frontend Architecture & Glassmorphism Design System** (`iwms-ui`: React 19 + TypeScript + Vite 6 + Tailwind CSS + Framer Motion, frosted glass styling, theme provider, floating navigation dock, responsive login page with instant demo roles)
 - [x] **Task 10: Core Frontend Screens & PWA Offline Sync Engine** (`DashboardPage` with Recharts & KPI counters, `InventoryPage` with glass table, search, filters & price masking, `WarehouseMapPage` 2D zone & bin fill grid, `StockMovementModal` with optimistic offline queueing, `idb` IndexedDB outbox & `ConflictReviewPanel`)
+- [x] **Task 11: Advanced Operational Features** (`MovementsPage` with time-travel slider querying `asof` timeline, `OrdersPage` with 1-click dock receiving, `CycleCountPage` with live variance reconciliation, `ReportsPage` with live OpenPDF preview & ZIP backup, `CommandPalette` with `Ctrl + K`)
 - [x] **Phase 1: Java Core Domain & JUnit 5 Tests**
 - [x] **Phase 2: File Persistence Layer (Ledger, Audit, Backup)**
 - [x] **Phase 3: Authentication, Session & REST API**
 - [x] **Phase 4: OpenPDF Summary Report Generator**
 - [x] **Phase 5: Frontend Shell & Glassmorphism Design System**
 - [x] **Phase 6: Core Frontend Screens & PWA Offline Engine**
-- [ ] **Phase 7: Advanced Business Logic (Time Travel, FEFO, Reorders)**
+- [x] **Phase 7: Advanced Business Logic (Time Travel, FEFO, Reorders)**
 - [ ] **Phase 8: Motion, Refinement & Performance Pass**
 - [ ] **Phase 9: STRETCH Features & Barcode Scanning**
 - [ ] **Phase 10: Final Packaging & Verification**
