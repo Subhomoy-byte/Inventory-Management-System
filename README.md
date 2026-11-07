@@ -460,22 +460,26 @@ Then access at `http://localhost:9090`.
 IWMS can be deployed to the cloud for free ($0) in two ways:
 
 ### Option A: Deploy Frontend to Vercel (Interactive Demo / Web PWA)
-Vercel is a global frontend and edge cloud platform. While Vercel does not run long-running Java virtual machines, **the React 19 PWA (`iwms-ui`) can be deployed to Vercel in 1 click**:
+Vercel is a global frontend and edge cloud platform. While Vercel does not run long-running Java virtual machines, **the React 19 PWA (`iwms-ui`) deploys seamlessly to Vercel in 1 click**:
 
-1. **Push to GitHub:** Ensure your latest code is on GitHub.
-2. **Import into Vercel:**
+1. **Import into Vercel:**
    - Go to [vercel.com](https://vercel.com) and log in.
    - Click **"Add New..."** &rarr; **"Project"**.
    - Select your repository: `Subhomoy-byte/Inventory-Management-System`.
-3. **Automatic Configuration:**
-   - The included [`vercel.json`](vercel.json) will automatically configure Vite, build `iwms-ui`, and set output directory to `iwms-ui/dist`.
-4. **Deploy:** Click **"Deploy"**.
+2. **Flexible Root Directory (Zero Configuration):**
+   - **Default (Root Directory: `./`):** The repository includes a root [`vercel.json`](vercel.json), root [`package.json`](package.json), and [`.npmrc`](.npmrc) configured with `--prefix iwms-ui` and `legacy-peer-deps=true`. You do not need to change anything!
+   - **Alternative (Root Directory: `iwms-ui`):** If you prefer to set the Vercel Root Directory to `iwms-ui`, a localized [`iwms-ui/vercel.json`](iwms-ui/vercel.json) and [`iwms-ui/.npmrc`](iwms-ui/.npmrc) are also provided.
+3. **Deploy:** Click **"Deploy"**.
    - Your live frontend URL (`https://inventory-management-system-xxx.vercel.app`) will be active in seconds!
    - **Standalone Demo Mode:** When running on Vercel without a backend connected, the PWA automatically uses its built-in browser IndexedDB database to populate demo inventory, allowing anyone on the internet to test the glassmorphism UI, 2D warehouse map, and cycle counts interactively!
-   - *(Optional)* To connect your Vercel frontend to a live Java backend, set the environment variable:
+   - *(Optional)* To connect your Vercel frontend to a live Java backend, set the environment variable in Vercel Project Settings &rarr; Environment Variables:
      ```
      VITE_API_BASE=https://your-iwms-backend.onrender.com/api
      ```
+
+> [!TIP]
+> **Vercel Troubleshooting (`BUILD_UTILS_SPAWN_1`):**
+> If you previously had a failed build with `BUILD_UTILS_SPAWN_1`, go to the **Deployments** tab on Vercel, click the three dots (`...`) next to the deployment, and click **Redeploy** (ensure *"Use existing Build Cache"* is unchecked) to fetch the latest commit.
 
 ---
 
