@@ -37,6 +37,8 @@ Thumbs.db
 logs/
 .superpowers/
 
-# IWMS Runtime Data (keep structure, ignore runtime backups)
-/data/backups/
-/data/*.tmp
+# IWMS Runtime Data (keep structure, ignore runtime backups & data)
+**/data/
+**/backups/
+data/
+backups/

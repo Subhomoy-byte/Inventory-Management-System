@@ -37,6 +37,10 @@ A full-stack, offline-capable inventory and warehouse management system designed
 | **Offline Sync Engine** | [`SyncEngine`](iwms-core/src/main/java/com/iwms/sync/SyncEngine.java) | Idempotent deduplication of queued client actions via `syncId`, automated conflict logging on inventory deficits for manager resolution |
 | **OpenPDF Floor Reports** | [`PdfReportGenerator`](iwms-core/src/main/java/com/iwms/report/PdfReportGenerator.java) | High-contrast monochrome A4 physical count sheets with physical count boxes, signature blocks, and dynamic RBAC price redaction |
 | **CSV Catalog Exporter** | [`CsvReportGenerator`](iwms-core/src/main/java/com/iwms/report/CsvReportGenerator.java) | Product catalog CSV export with role-aware cost price masking and CSV parsing round-trip |
+| **REST API & Web Host** | [`com.iwms.api.controller.*`](iwms-web/src/main/java/com/iwms/api/controller/) | Spring Boot 3 controllers for Auth, Products, Stock In/Out/Transfer/Undo, Time-Travel, Warehouses, Sync, and Reports |
+| **Lightweight Custom Auth Filter** | [`CustomAuthFilter`](iwms-web/src/main/java/com/iwms/api/filter/CustomAuthFilter.java) | Pure Java token validation via `SessionManager` without heavy Spring Security dependency, binding context `User` |
+| **Role-Aware DTO Projections** | [`ProductDto`](iwms-web/src/main/java/com/iwms/api/dto/ProductDto.java) | Dynamic field-level projection stripping sensitive `costPrice` and margin data for `EMPLOYEE` role clients |
+| **Domain Bean Configuration** | [`DomainBeanConfig`](iwms-web/src/main/java/com/iwms/api/config/DomainBeanConfig.java) | Spring wiring for pure Java core domain classes, enforcing zero Spring framework leakage in domain libraries |
 | **Custom Exceptions** | [`com.iwms.exception.*`](iwms-core/src/main/java/com/iwms/exception/) | Checked exceptions ([`InsufficientStockException`](iwms-core/src/main/java/com/iwms/exception/InsufficientStockException.java), [`DuplicateSkuException`](iwms-core/src/main/java/com/iwms/exception/DuplicateSkuException.java), [`StorageException`](iwms-core/src/main/java/com/iwms/exception/StorageException.java), [`SyncConflictException`](iwms-core/src/main/java/com/iwms/exception/SyncConflictException.java)) and unchecked exceptions ([`UnauthorizedException`](iwms-core/src/main/java/com/iwms/exception/UnauthorizedException.java), [`ForbiddenException`](iwms-core/src/main/java/com/iwms/exception/ForbiddenException.java)) |
 
 ---
@@ -50,11 +54,12 @@ A full-stack, offline-capable inventory and warehouse management system designed
 - [x] **Task 4: Warehouse Entities, Collections & Inventory Service** (8 JUnit 5 tests passing: Concurrency, Undo stack, LRU cache, PriorityQueue alerts, Time travel timeline, Streams analytics)
 - [x] **Task 5: File Persistence Layer (Atomic Writes, Ledger, Audit, Backup/Restore)** (6 JUnit 5 tests passing: Atomic writes, WAL ledger append & replay, audit logging, file-backed repository restart recovery, zip backup & restore, 200+ product catalog seeder)
 - [x] **Task 6: Authentication, User RBAC & Offline Sync Engine** (6 JUnit 5 tests passing: PBKDF2 hashing, account lockout, RBAC permission hierarchy, token sessions, offline idempotent sync, deficit conflict handling)
-- [x] **Task 7: OpenPDF Summary Report Generator** (3 JUnit 5 tests passing: Monochrome A4 PDF count sheet generation, RBAC employee price masking, CSV catalog export/import. Total 37 core tests passing)
+- [x] **Task 7: OpenPDF Summary Report Generator** (3 JUnit 5 tests passing: Monochrome A4 PDF count sheet generation, RBAC employee price masking, CSV catalog export/import)
+- [x] **Task 8: Spring Boot REST API, Custom Auth Filter & HTTPS Keystore** (7 SpringBoot integration tests passing: Authentication, Token verification, Role-based cost price redaction, Inbound/Outbound REST mutations, PDF streaming. Total 44 multi-module tests passing)
 - [x] **Phase 1: Java Core Domain & JUnit 5 Tests**
 - [x] **Phase 2: File Persistence Layer (Ledger, Audit, Backup)**
+- [x] **Phase 3: Authentication, Session & REST API**
 - [x] **Phase 4: OpenPDF Summary Report Generator**
-- [/] **Phase 3: Authentication, Session & REST API**
 - [ ] **Phase 5: Frontend Shell & Glassmorphism Design System**
 - [ ] **Phase 6: Core Frontend Screens & PWA Offline Engine**
 - [ ] **Phase 7: Advanced Business Logic (Time Travel, FEFO, Reorders)**
