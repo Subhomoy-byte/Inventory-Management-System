@@ -15,15 +15,12 @@ A full-stack, offline-capable inventory and warehouse management system designed
 
 | Java Concept | Location in Codebase | Description & Usage |
 | :--- | :--- | :--- |
-| **Encapsulation** | `com.iwms.model.*` | All fields private; validation in constructors/setters; immutable `StockMovement`; unmodifiable collection views; password hash/salt never exposed |
-| **Abstraction** | `com.iwms.model.Product`, `com.iwms.model.User` | Abstract classes with abstract methods (`calculateStorageCost()`, `getHandlingRules()`, `getPermissions()`) |
-| **Inheritance & Polymorphism** | `com.iwms.model.PerishableProduct`, `ElectronicProduct`, `FragileProduct`, `BulkProduct`; `AdminUser`, `ManagerUser`, `EmployeeUser` | Subclasses implementing domain-specific behavior and role-based permission sets |
-| **Design Patterns** | `Product.ProductBuilder`, `Repository<T, ID>`, Strategy interfaces | Builder pattern, Repository pattern, Strategy pattern (Pick, Alert, Reorder, Pricing) |
-| **Interfaces (2+ Impls)** | `PickStrategy`, `AlertStrategy`, `PricingStrategy`, `ReorderStrategy`, `ReportGenerator`, `Authenticator`, `Repository` | Polymorphic strategies with runtime substitution (e.g. `FefoPickStrategy` vs `FifoPickStrategy`) |
-| **Collections** | `com.iwms.service.*`, `com.iwms.repository.*` | `HashMap` (SKU index), `TreeMap` (time-travel views), `PriorityQueue` (alert priority), `ArrayDeque` (undo stack), `HashSet` (sync deduplication), `EnumSet` (permissions), `LinkedHashMap` (LRU cache) |
-| **File Handling & Atomic Writes** | `com.iwms.storage.*` | `java.nio.file`, atomic file replacement (`ATOMIC_MOVE`), append-only `ledger.log` & `audit.log`, automated backup & restore |
-| **Concurrency** | `com.iwms.service.InventoryService` | `ReentrantReadWriteLock` managing concurrent readers and serialized writers |
-| **Custom Exceptions** | `com.iwms.exception.*` | `InsufficientStockException`, `DuplicateSkuException`, `StorageException`, `SyncConflictException`, `UnauthorizedException`, `ForbiddenException` |
+| **Encapsulation** | [`com.iwms.model.Product`](iwms-core/src/main/java/com/iwms/model/Product.java), [`Batch`](iwms-core/src/main/java/com/iwms/model/Batch.java) | All fields private; validation in constructors/setters; immutable [`StockMovement`](iwms-core/src/main/java/com/iwms/model/StockMovement.java); unmodifiable collection views |
+| **Abstraction** | [`com.iwms.model.Product`](iwms-core/src/main/java/com/iwms/model/Product.java) | Abstract class with abstract methods (`calculateStorageCost()`, `getHandlingRules()`) |
+| **Inheritance & Polymorphism** | [`PerishableProduct`](iwms-core/src/main/java/com/iwms/model/PerishableProduct.java), [`ElectronicProduct`](iwms-core/src/main/java/com/iwms/model/ElectronicProduct.java), [`FragileProduct`](iwms-core/src/main/java/com/iwms/model/FragileProduct.java), [`BulkProduct`](iwms-core/src/main/java/com/iwms/model/BulkProduct.java) | Subclasses overriding storage cost calculation and specialized handling rules |
+| **Design Patterns** | [`Product.ProductBuilder`](iwms-core/src/main/java/com/iwms/model/Product.java) | Fluent recursive builder pattern enforcing parameter validation |
+| **Interfaces (Domain)** | [`Storable`](iwms-core/src/main/java/com/iwms/model/Storable.java), [`Auditable`](iwms-core/src/main/java/com/iwms/model/Auditable.java), [`Exportable`](iwms-core/src/main/java/com/iwms/model/Exportable.java) | Abstract behavioral contracts for storage, auditing, and CSV export |
+| **Custom Exceptions** | [`com.iwms.exception.*`](iwms-core/src/main/java/com/iwms/exception/) | Checked exceptions ([`InsufficientStockException`](iwms-core/src/main/java/com/iwms/exception/InsufficientStockException.java), [`DuplicateSkuException`](iwms-core/src/main/java/com/iwms/exception/DuplicateSkuException.java), [`StorageException`](iwms-core/src/main/java/com/iwms/exception/StorageException.java), [`SyncConflictException`](iwms-core/src/main/java/com/iwms/exception/SyncConflictException.java)) and unchecked exceptions ([`UnauthorizedException`](iwms-core/src/main/java/com/iwms/exception/UnauthorizedException.java), [`ForbiddenException`](iwms-core/src/main/java/com/iwms/exception/ForbiddenException.java)) |
 
 ---
 
@@ -31,6 +28,7 @@ A full-stack, offline-capable inventory and warehouse management system designed
 
 - [x] **Project Inception & Architecture Specification** (Docs: [Design Specification](docs/superpowers/specs/2026-11-08-inventory-warehouse-management-system-design.md))
 - [x] **Task 1: Maven Multi-Module Scaffolding** (`iwms-core`, `iwms-web`, Maven Wrapper, JUnit 5 SmokeTest verified)
+- [x] **Task 2: Core Domain Model, Enums & Product Hierarchy** (7 JUnit 5 tests passing: Builder, Encapsulation, Polymorphism, Immutability)
 - [/] **Phase 1: Java Core Domain & JUnit 5 Tests**
 - [ ] **Phase 2: File Persistence Layer (Ledger, Audit, Backup)**
 - [ ] **Phase 3: Authentication, Session & REST API**
