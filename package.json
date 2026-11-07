@@ -1,0 +1,7 @@
+{
+  "name": "inventory-management-system",
+  "private": true,
+  "scripts": {
+    "build": "npm run build --prefix iwms-ui"
+  }
+}
