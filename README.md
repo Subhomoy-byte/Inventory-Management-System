@@ -45,6 +45,9 @@ A full-stack, offline-capable inventory and warehouse management system designed
 | **Glassmorphism UI Shell** | [`App.tsx`](iwms-ui/src/App.tsx), [`index.css`](iwms-ui/src/index.css) | Frosted glass containers (`backdrop-blur-xl`), animated gradient mesh, responsive layout, dark/light theme |
 | **Floating Glass Dock** | [`Dock.tsx`](iwms-ui/src/components/layout/Dock.tsx) | macOS-inspired floating navigation dock with tooltips, active tab scaling, and pending sync count badges |
 | **Client-Side RBAC & Quick Login** | [`LoginPage.tsx`](iwms-ui/src/pages/LoginPage.tsx), [`AuthContext.tsx`](iwms-ui/src/context/AuthContext.tsx) | Responsive login screen with 1-click Admin, Manager, and Employee credential fillers, secure token storage |
+| **PWA Offline Storage & Sync Engine** | [`db.ts`](iwms-ui/src/storage/db.ts), [`sync.ts`](iwms-ui/src/storage/sync.ts) | IndexedDB (`idb`) outbox queue, optimistic offline stock mutations, automated LAN reconnect flush, deficit conflict triage |
+| **2D Warehouse Topology Map** | [`WarehouseMapPage.tsx`](iwms-ui/src/pages/WarehouseMapPage.tsx) | Interactive 2D floor grid visualizing Zones, Bins, utilization fill percentages, and item inspection drawer |
+| **Real-time Inventory Management** | [`DashboardPage.tsx`](iwms-ui/src/pages/DashboardPage.tsx), [`InventoryPage.tsx`](iwms-ui/src/pages/InventoryPage.tsx) | Recharts category analytics, low stock radar, glass data table with search, category/status filters, and stock In/Out/Transfer modal |
 
 ---
 
@@ -60,12 +63,13 @@ A full-stack, offline-capable inventory and warehouse management system designed
 - [x] **Task 7: OpenPDF Summary Report Generator** (3 JUnit 5 tests passing: Monochrome A4 PDF count sheet generation, RBAC employee price masking, CSV catalog export/import)
 - [x] **Task 8: Spring Boot REST API, Custom Auth Filter & HTTPS Keystore** (7 SpringBoot integration tests passing: Authentication, Token verification, Role-based cost price redaction, Inbound/Outbound REST mutations, PDF streaming. Total 44 multi-module tests passing)
 - [x] **Task 9: Frontend Architecture & Glassmorphism Design System** (`iwms-ui`: React 19 + TypeScript + Vite 6 + Tailwind CSS + Framer Motion, frosted glass styling, theme provider, floating navigation dock, responsive login page with instant demo roles)
+- [x] **Task 10: Core Frontend Screens & PWA Offline Sync Engine** (`DashboardPage` with Recharts & KPI counters, `InventoryPage` with glass table, search, filters & price masking, `WarehouseMapPage` 2D zone & bin fill grid, `StockMovementModal` with optimistic offline queueing, `idb` IndexedDB outbox & `ConflictReviewPanel`)
 - [x] **Phase 1: Java Core Domain & JUnit 5 Tests**
 - [x] **Phase 2: File Persistence Layer (Ledger, Audit, Backup)**
 - [x] **Phase 3: Authentication, Session & REST API**
 - [x] **Phase 4: OpenPDF Summary Report Generator**
 - [x] **Phase 5: Frontend Shell & Glassmorphism Design System**
-- [ ] **Phase 6: Core Frontend Screens & PWA Offline Engine**
+- [x] **Phase 6: Core Frontend Screens & PWA Offline Engine**
 - [ ] **Phase 7: Advanced Business Logic (Time Travel, FEFO, Reorders)**
 - [ ] **Phase 8: Motion, Refinement & Performance Pass**
 - [ ] **Phase 9: STRETCH Features & Barcode Scanning**
